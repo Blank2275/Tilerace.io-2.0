@@ -19,11 +19,24 @@ var game = new Game();
 var frameCount = 0;
 
 function draw(){
-    if(frameCount){
-        background(0);
-        drawTiles();   
-    }
+    background(0);
+    drawTiles();   
     frameCount++;
+}
+
+function keyPressed(){
+    if (keyCode == RIGHT_ARROW && game.x < game.tiles[0].length){
+        game.x += 1;
+    }
+    if (keyCode == LEFT_ARROW && game.x > 0){
+        game.x -= 1;
+    }    
+    if (keyCode == UP_ARROW && game.y > 0){
+        game.y -= 1;
+    }
+    if (keyCode == DOWN_ARROW && game.y < game.tiles.length){
+        game.y += 1;
+    }
 }
 
 function drawTiles(){
@@ -38,8 +51,8 @@ function drawTiles(){
         for(var x in tiles[y]){
             if(x > xMin && x < xMax && y > yMin && y < yMax){
                 //might be on screen;
-                var relativeX = game.x - x; // x pos of tile compared to player
-                var relativeY = game.y - y;
+                var relativeX = x - game.x; // x pos of tile compared to player
+                var relativeY = y - game.y; // y pos of tile compared to player
                 var middleX = windowWidth / 2 - game.tileSize; // middle of screen
                 var middleY = windowHeight / 2 - game.tileSize; // middle of screen
                 var xAdj = middleX + (relativeX * game.tileSize); // finds adjusted position of tile for drawing
@@ -58,7 +71,6 @@ function drawTiles(){
                     color[0] *= brightnesMultiplier;
                     color[1] *= brightnesMultiplier;
                     color[2] *= brightnesMultiplier;
-                    console.log(color);
                     fill(color[0], color[1], color[2]);
                 }
 

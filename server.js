@@ -23,15 +23,14 @@ class Game{
         if(this.numberOfActivePlayers < players){
             var x = 0;
             var y = 0;
-            switch (this.numberOfActivePlayers){
-                case 0:
-                    x = 0;
-                    y = Math.floor(this.height / 2);
-                case 1:
-                    x = this.width - 1;
-                    y = Math.floor(this.height / 2);
+            if(this.numberOfActivePlayers == 0){
+                x = 0;
+                y = Math.floor(this.height / 2);
             }
-            console.log(y);
+            if(this.numberOfActivePlayers == 1){
+                x = this.width - 1;
+                y = Math.floor(this.height / 2);
+            }
             this.tiles[y][x] = {
                 "owner": this.numberOfActivePlayers,
                 "strength": 10
@@ -39,7 +38,8 @@ class Game{
             this.activePlayers[id] = {
                 "x": x,
                 "y": y,
-                "tiles": 10
+                "tiles": 10,
+                "playerNum": this.numberOfActivePlayers
             }
             this.numberOfActivePlayers += 1;
         }
@@ -67,11 +67,12 @@ app.get("/game.js", function (req, res){
 
 io.on("connection", function (socket){
     game.addPlayer(socket.id);
-    game.numberOfActivePlayers = 0;
+    
     var player = game.activePlayers[socket.id];
     var x = 0;
     var y = 0;
     var tiles = game.tiles;
+    console.log(player);
     if(player){
         x = player["x"];
         y = player["y"];
