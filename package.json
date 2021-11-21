@@ -1,0 +1,25 @@
+{
+  "name": "tilerace.io-2.0",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "run",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Blank2275/Tilerace.io-2.0.git"
+  },
+  "author": "Connor F. Reed",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Blank2275/Tilerace.io-2.0/issues"
+  },
+  "homepage": "https://github.com/Blank2275/Tilerace.io-2.0#readme",
+  "dependencies": {
+    "experss": "^0.0.1-security",
+    "express": "^4.17.1",
+    "socket.io": "^4.4.0"
+  }
+}
