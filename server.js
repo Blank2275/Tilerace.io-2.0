@@ -6,8 +6,8 @@ class Game{
     constructor(){
         this.numberOfActivePlayers = 0;
         this.activePlayers = {};
-        this.width = 100;
-        this.height = 100;
+        this.width = 30;
+        this.height = 30;
         this.tiles = [];
         for(var y = 0; y < this.height; y++){
             this.tiles.push([]);
@@ -77,7 +77,12 @@ io.on("connection", function (socket){
         x = player["x"];
         y = player["y"];
     }
-    socket.emit("startSync", x, y, tiles)
+    socket.emit("startSync", x, y, tiles, game.activePlayers);
+    socket.on("move", (x, y) =>{
+        game.activePlayers[socket.id]["x"] = x;
+        game.activePlayers[socket.id]["y"] = y;
+        io.emit("updatePlayers", game.activePlayers);
+    });
 });
 
 http.listen(8080, function(){

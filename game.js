@@ -8,6 +8,7 @@ class Game{
         this.x = 0;
         this.y = 0;
         this.tiles = [];
+        this.activePlayers = {};
     }
 }
 
@@ -37,6 +38,7 @@ function keyPressed(){
     if (keyCode == DOWN_ARROW && game.y < game.tiles.length){
         game.y += 1;
     }
+    socket.emit("move", game.x, game.y);
 }
 
 function drawTiles(){
@@ -75,6 +77,22 @@ function drawTiles(){
                 }
 
                 rect(xAdj, yAdj, game.tileSize, game.tileSize);
+
+                //draw players
+                for(var key of Object.keys(game.activePlayers)){
+                    var player = game.activePlayers[key];
+                    var px = player["x"];
+                    var py = player["y"];
+                    var playerNum = player["playerNum"];
+
+                    if(px == x && py == y){
+                        var pXAdj = xAdj + game.tileSize / 2; // player adjusted x
+                        var pYAdj = yAdj + game.tileSize / 2;
+                        var color = colors[playerNum];
+                        fill(color[0], color[1], color[2]);
+                        ellipse(pXAdj, pYAdj, 10, 10)
+                    }
+                }
             }
         }
     }
