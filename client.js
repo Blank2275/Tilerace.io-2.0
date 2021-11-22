@@ -7,6 +7,9 @@ socket.on("startSync", (x, y, tiles, players, tilesAvailable, numberOfActivePlay
     game.playerNum = Object.keys(players).length - 1;
     game.tilesAvailable = tilesAvailable;
     game.playerNum = numberOfActivePlayers - 1;
+    game.homeX = x;
+    game.homeY = y;
+    game.playing = true;
 });
 
 socket.on("updatePlayers", (players) => {
@@ -19,4 +22,13 @@ socket.on("placeTile", (x, y, id, num) => {
         game.tiles[y][x]["strength"] = 0;
     }
     game.tiles[y][x]["strength"] += 1;
+});
+
+socket.on("addTile", () => {
+    game.tilesAvailable += 1;
+});
+
+socket.on("lose", (id, num) => {
+    var playerName = playerNames[num];
+    alert(`${playerName} is out`);
 })

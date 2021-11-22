@@ -11,6 +11,7 @@ class Game{
         this.width = 30;
         this.height = 30;
         this.tiles = [];
+        this.addTileFrequency = 2000;
         for(var y = 0; y < this.height; y++){
             this.tiles.push([]);
             for(var x = 0; x < this.width; x++){
@@ -55,6 +56,11 @@ class Player{
 var players = 2;
 var game = new Game();
 
+function addTile(){
+    io.emit("addTile");
+}
+setInterval(addTile, game.addTileFrequency);
+
 app.get("/", function (req, res){
     res.sendFile(__dirname + "/index.html");
 });
@@ -96,6 +102,10 @@ io.on("connection", function (socket){
         }
         game.tiles[y][x]["strength"] += 1;
         io.emit("placeTile", x, y, socket.id, num);
+    });
+    socket.on("lose", () => {
+        var num = game.activePlayers[socket.id]["playerNum"];
+        io.emit("lose", socket.id, num);
     });
 });
 

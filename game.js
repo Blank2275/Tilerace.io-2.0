@@ -2,6 +2,10 @@ var colors = {
     0: [240, 30, 60],
     1: [30, 70, 240]
 }
+var playerNames = {
+    0: "Red",
+    1:"Blue"
+}
 class Game{
     constructor(){
         this.tileSize = 20;
@@ -9,10 +13,13 @@ class Game{
         this.maxEnemyInArea = 8;
         this.x = 0;
         this.y = 0;
+        this.homeY = 0;
+        this.homeX = 0;
         this.tiles = [];
         this.activePlayers = {};
         this.playerNum = -1;
         this.tilesAvailable = 10;
+        this.playing = true;
     }
 }
 
@@ -27,7 +34,22 @@ function draw(){
     background(0);
     drawTiles();   
     drawUI();
+    checkLose();
     frameCount++;
+}
+
+function checkLose(){
+    if(game.tiles.length > 0){
+        var tile = game.tiles[game.homeY][game.homeX];
+        if(tile["owner"] != game.playerNum && game.playing){
+            lose();
+            socket.emit("lose");
+        }
+    }
+}
+
+function lose(){
+    game.playing = false;
 }
 
 function drawUI(){
@@ -37,7 +59,7 @@ function drawUI(){
 }
 
 function keyPressed(){
-    if (keyCode == RIGHT_ARROW && game.x < game.tiles[0].length){
+    if (keyCode == RIGHT_ARROW && game.x < game.tiles[0].length - 1){
         game.x += 1;
         socket.emit("move", game.x, game.y);
     }
@@ -49,11 +71,11 @@ function keyPressed(){
         game.y -= 1;
         socket.emit("move", game.x, game.y);
     }
-    if (keyCode == DOWN_ARROW && game.y < game.tiles.length){
+    if (keyCode == DOWN_ARROW && game.y < game.tiles.length - 1){
         game.y += 1;
         socket.emit("move", game.x, game.y);
     }
-    if(keyCode == 32){
+    if(keyCode == 32 && game.playing){
         var placingPossible = false;
         var enemyInArea = 0;
         for(var y = game.y - game.placeRange; y < game.y + game.placeRange; y++){
@@ -75,7 +97,7 @@ function keyPressed(){
                 var tile = game.tiles[game.y][game.x];
                 if(enemyInArea < game.maxEnemyInArea || tile["owner"] !== -1){
                     socket.emit("placeTile", game.x, game.y, game.playerNum);
-                    if(game.playerNum !== tile["owner"]){
+                    if(game.playerNum !== tile["owner"] && tile["owner"] != -1){
                         game.tilesAvailable -= tile["strength"];
                         if(game.tilesAvailable < 1){
                             game.tilesAvailable = 1;
