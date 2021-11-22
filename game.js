@@ -22,6 +22,7 @@ class Game{
         this.playerNum = -1;
         this.tilesAvailable = 10;
         this.playing = true;
+        this.ready = false
     }
 }
 
@@ -61,23 +62,23 @@ function drawUI(){
 }
 
 function keyPressed(){
-    if (keyCode == RIGHT_ARROW && game.x < game.tiles[0].length - 1){
+    if (keyCode == RIGHT_ARROW && game.x < game.tiles[0].length - 1 && game.ready){
         game.x += 1;
         socket.emit("move", game.x, game.y);
     }
-    if (keyCode == LEFT_ARROW && game.x > 0){
+    if (keyCode == LEFT_ARROW && game.x > 0 && game.ready){
         game.x -= 1;
         socket.emit("move", game.x, game.y);
     }    
-    if (keyCode == UP_ARROW && game.y > 0){
+    if (keyCode == UP_ARROW && game.y > 0 && game.ready){
         game.y -= 1;
         socket.emit("move", game.x, game.y);
     }
-    if (keyCode == DOWN_ARROW && game.y < game.tiles.length - 1){
+    if (keyCode == DOWN_ARROW && game.y < game.tiles.length - 1 && game.ready){
         game.y += 1;
         socket.emit("move", game.x, game.y);
     }
-    if(keyCode == 32 && game.playing){
+    if(keyCode == 32 && game.playing && game.ready){
         var placingPossible = false;
         var enemyInArea = 0;
         for(var y = game.y - game.placeRange; y < game.y + game.placeRange; y++){
@@ -86,7 +87,7 @@ function keyPressed(){
                     var tile = game.tiles[y][x];
                     if(tile["owner"] == game.playerNum){
                         placingPossible = true;
-                        enemyInArea -= tile["strength"] * 2;
+                        enemyInArea -= tile["strength"];
                     } else{
                         if(tile["owner"] != -1){
                             enemyInArea += tile["strength"];

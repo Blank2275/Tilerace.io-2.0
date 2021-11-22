@@ -10,6 +10,8 @@ socket.on("startSync", (x, y, tiles, players, tilesAvailable, numberOfActivePlay
     game.homeX = x;
     game.homeY = y;
     game.playing = true;
+    game.ready = false;
+    console.log("start sync")
 });
 
 socket.on("updatePlayers", (players) => {
@@ -34,6 +36,12 @@ socket.on("lose", (id, num) => {
 });
 
 socket.on("newPlayer", (x, y, num) => {
-    game.tiles[y][x]["owner"] = num;
-    game.tiles[y][x]["strength"] = 10;
-})
+    if(game.playerNum != -1){
+        game.tiles[y][x]["owner"] = num;
+        game.tiles[y][x]["strength"] = 10;
+    }
+});
+
+socket.on("start", () => {
+    game.ready = true;
+});

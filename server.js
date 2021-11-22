@@ -12,6 +12,7 @@ class Game{
         this.height = 30;
         this.tiles = [];
         this.addTileFrequency = 2000;
+        this.playing = false;
         for(var y = 0; y < this.height; y++){
             this.tiles.push([]);
             for(var x = 0; x < this.width; x++){
@@ -49,6 +50,9 @@ class Game{
                 "playerNum": this.numberOfActivePlayers
             }
             this.numberOfActivePlayers += 1;
+            if(this.numberOfActivePlayers == players){
+                this.playing = true;
+            }
         }
     }
 }
@@ -59,9 +63,16 @@ class Player{
 
 var players = 3;
 var game = new Game();
+var first = true;
 
 function addTile(){
-    io.emit("addTile");
+    if(game.playing){
+        io.emit("addTile");
+        if(first){
+            io.emit("start");
+            first = false;
+        }
+    }
 }
 setInterval(addTile, game.addTileFrequency);
 
@@ -88,9 +99,9 @@ io.on("connection", function (socket){
         x = player["x"];
         y = player["y"];
         tilesAvailable = player["tiles"];
+        io.emit("newPlayer", x, y, player["playerNum"]);
     }
     socket.emit("startSync", x, y, tiles, game.activePlayers, tilesAvailable, game.numberOfActivePlayers);
-    io.emit("newPlayer", x, y, player["playerNum"]);
     if(game.numberOfActivePlayers > 1 && debugMode == true){
         game.numberOfActivePlayers = 0;
     }
