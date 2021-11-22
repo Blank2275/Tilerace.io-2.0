@@ -2,7 +2,7 @@ var app = require('express')();
 var http = require('http').createServer(app);
 var io = require('socket.io')(http);
 
-var debugMode  = true;
+var debugMode  = false;
 
 class Game{
     constructor(){
@@ -90,9 +90,11 @@ io.on("connection", function (socket){
         game.numberOfActivePlayers = 0;
     }
     socket.on("move", (x, y) =>{
-        game.activePlayers[socket.id]["x"] = x;
-        game.activePlayers[socket.id]["y"] = y;
-        io.emit("updatePlayers", game.activePlayers);
+        if(game.activePlayers[socket.id]){
+            game.activePlayers[socket.id]["x"] = x;
+            game.activePlayers[socket.id]["y"] = y;
+            io.emit("updatePlayers", game.activePlayers);
+        }
     });
     socket.on("placeTile", (x, y, num) =>{
         game.tiles[y][x]
@@ -104,8 +106,10 @@ io.on("connection", function (socket){
         io.emit("placeTile", x, y, socket.id, num);
     });
     socket.on("lose", () => {
-        var num = game.activePlayers[socket.id]["playerNum"];
-        io.emit("lose", socket.id, num);
+        if(game.activePlayers[socket.id]){
+            var num = game.activePlayers[socket.id]["playerNum"];
+            io.emit("lose", socket.id, num);
+        }
     });
 });
 
