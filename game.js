@@ -6,6 +6,7 @@ class Game{
     constructor(){
         this.tileSize = 20;
         this.placeRange = 6;
+        this.maxEnemyInArea = 8;
         this.x = 0;
         this.y = 0;
         this.tiles = [];
@@ -25,7 +26,14 @@ var frameCount = 0;
 function draw(){
     background(0);
     drawTiles();   
+    drawUI();
     frameCount++;
+}
+
+function drawUI(){
+    fill(70, 40, 220);
+    textSize(30);
+    text(`Tiles: ${game.tilesAvailable}`, 10, 35)
 }
 
 function keyPressed(){
@@ -47,26 +55,34 @@ function keyPressed(){
     }
     if(keyCode == 32){
         var placingPossible = false;
+        var enemyInArea = 0;
         for(var y = game.y - game.placeRange; y < game.y + game.placeRange; y++){
             for(var x = game.x - game.placeRange; x < game.x + game.placeRange; x++){
                 if(x >= 0 && y >= 0 && x < game.tiles[0].length && y < game.tiles.length){
                     var tile = game.tiles[y][x];
-                    if(tile["owner"] != -1){
-                        console.log(game.playerNum);
-                    }
                     if(tile["owner"] == game.playerNum){
                         placingPossible = true;
-                        console.log(1);
+                    } else{
+                        if(tile["owner"] != -1){
+                            enemyInArea += tile["strength"];
+                        }
                     }
                 }
             }   
         }
         if(placingPossible){
-            console.log(3);
             if(game.tilesAvailable > 0){
-                console.log(2);
-                socket.emit("placeTile", game.x, game.y, game.playerNum);
-                game.tilesAvailable -= 1;
+                var tile = game.tiles[game.y][game.x];
+                if(enemyInArea < game.maxEnemyInArea || tile["owner"] !== -1){
+                    socket.emit("placeTile", game.x, game.y, game.playerNum);
+                    if(game.playerNum !== tile["owner"]){
+                        game.tilesAvailable -= tile["strength"];
+                        if(game.tilesAvailable < 1){
+                            game.tilesAvailable = 1;
+                        }
+                    }
+                    game.tilesAvailable -= 1;
+                }
             }
         }
     }
