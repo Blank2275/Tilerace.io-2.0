@@ -31,4 +31,9 @@ socket.on("addTile", () => {
 socket.on("lose", (id, num) => {
     var playerName = playerNames[num];
     alert(`${playerName} is out`);
+});
+
+socket.on("newPlayer", (x, y, num) => {
+    game.tiles[y][x]["owner"] = num;
+    game.tiles[y][x]["strength"] = 10;
 })

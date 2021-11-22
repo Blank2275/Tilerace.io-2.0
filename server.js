@@ -34,6 +34,10 @@ class Game{
                 x = this.width - 1;
                 y = Math.floor(this.height / 2);
             }
+            if(this.numberOfActivePlayers == 2){
+                x = Math.floor(this.width / 2);
+                y = 0;
+            }
             this.tiles[y][x] = {
                 "owner": this.numberOfActivePlayers,
                 "strength": 10
@@ -53,7 +57,7 @@ class Player{
     
 }
 
-var players = 2;
+var players = 3;
 var game = new Game();
 
 function addTile(){
@@ -86,6 +90,7 @@ io.on("connection", function (socket){
         tilesAvailable = player["tiles"];
     }
     socket.emit("startSync", x, y, tiles, game.activePlayers, tilesAvailable, game.numberOfActivePlayers);
+    io.emit("newPlayer", x, y, player["playerNum"]);
     if(game.numberOfActivePlayers > 1 && debugMode == true){
         game.numberOfActivePlayers = 0;
     }
