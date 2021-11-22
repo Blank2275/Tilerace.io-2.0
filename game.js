@@ -4,11 +4,14 @@ var colors = {
 }
 class Game{
     constructor(){
-        this.tileSize = 50;
+        this.tileSize = 20;
+        this.placeRange = 6;
         this.x = 0;
         this.y = 0;
         this.tiles = [];
         this.activePlayers = {};
+        this.playerNum = -1;
+        this.tilesAvailable = 10;
     }
 }
 
@@ -28,17 +31,45 @@ function draw(){
 function keyPressed(){
     if (keyCode == RIGHT_ARROW && game.x < game.tiles[0].length){
         game.x += 1;
+        socket.emit("move", game.x, game.y);
     }
     if (keyCode == LEFT_ARROW && game.x > 0){
         game.x -= 1;
+        socket.emit("move", game.x, game.y);
     }    
     if (keyCode == UP_ARROW && game.y > 0){
         game.y -= 1;
+        socket.emit("move", game.x, game.y);
     }
     if (keyCode == DOWN_ARROW && game.y < game.tiles.length){
         game.y += 1;
+        socket.emit("move", game.x, game.y);
     }
-    socket.emit("move", game.x, game.y);
+    if(keyCode == 32){
+        var placingPossible = false;
+        for(var y = game.y - game.placeRange; y < game.y + game.placeRange; y++){
+            for(var x = game.x - game.placeRange; x < game.x + game.placeRange; x++){
+                if(x >= 0 && y >= 0 && x < game.tiles[0].length && y < game.tiles.length){
+                    var tile = game.tiles[y][x];
+                    if(tile["owner"] != -1){
+                        console.log(game.playerNum);
+                    }
+                    if(tile["owner"] == game.playerNum){
+                        placingPossible = true;
+                        console.log(1);
+                    }
+                }
+            }   
+        }
+        if(placingPossible){
+            console.log(3);
+            if(game.tilesAvailable > 0){
+                console.log(2);
+                socket.emit("placeTile", game.x, game.y, game.playerNum);
+                game.tilesAvailable -= 1;
+            }
+        }
+    }
 }
 
 function drawTiles(){
