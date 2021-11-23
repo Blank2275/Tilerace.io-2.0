@@ -34,7 +34,8 @@ var game = new Game();
 var frameCount = 0;
 
 function draw(){
-    background(0);
+    clear();
+    background(0, 0, 0,0);
     drawTiles();   
     drawUI();
     checkLose();
