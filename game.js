@@ -103,7 +103,6 @@ function keyPressed(){
                     socket.emit("placeTile", game.x, game.y, game.playerNum);
                     if(game.playerNum !== tile["owner"] && tile["owner"] != -1){
                         game.tilesAvailable -= tile["strength"];
-                        console.log(tile["strength"]);
                         if(game.tilesAvailable < 1){
                             game.tilesAvailable = 1;
                         }

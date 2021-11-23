@@ -95,7 +95,6 @@ app.get("/manage", function(req, res){
 io.on("connection", function (socket){
     socket.on("startSync", () => {
         setupPlayer(socket.id);
-        console.log("setup");
     });
     if(game.numberOfActivePlayers > 1 && debugMode == true){
         game.numberOfActivePlayers = 0;
