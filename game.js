@@ -57,7 +57,7 @@ function lose(){
 }
 
 function drawUI(){
-    fill(70, 40, 220);
+    fill(220, 40, 70);
     textSize(30);
     text(`Tiles: ${game.tilesAvailable}`, 10, 35)
 }

@@ -8,6 +8,7 @@ class Game{
     constructor(){
         this.numberOfActivePlayers = 0;
         this.activePlayers = {};
+        this.playersLoggedIn = [];
         this.width = 30;
         this.height = 30;
         this.tiles = [];
@@ -125,7 +126,7 @@ io.on("connection", function (socket){
         //change settins
         players = playerIndex + 2; // if the index of input is 0, the players is two
 
-        var ids = Object.keys(game.activePlayers);
+        var ids = game.playersLoggedIn;
         game = new Game();
         for(var id of ids){
             setupPlayer(id);
@@ -133,10 +134,16 @@ io.on("connection", function (socket){
         first = true;
         game.playing = true;
     });
+    socket.on("disconnect", () => {
+        var index = game.playersLoggedIn.indexOf(socket.id);
+        game.playersLoggedIn.splice(index, 1);
+        console.log(index);
+    })
 });
 
 function setupPlayer(id){
     game.addPlayer(id);
+    game.playersLoggedIn.push(id);
     var player = game.activePlayers[id];
     var x = 0;
     var y = 0;
