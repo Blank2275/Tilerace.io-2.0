@@ -71,7 +71,6 @@ function addTile(){
         if(first){
             io.emit("start");
             first = false;
-            console.log("start");
         }
     }
 }
@@ -96,7 +95,8 @@ app.get("/manage", function(req, res){
 io.on("connection", function (socket){
     socket.on("startSync", () => {
         setupPlayer(socket.id);
-    })
+        console.log("setup");
+    });
     if(game.numberOfActivePlayers > 1 && debugMode == true){
         game.numberOfActivePlayers = 0;
     }
@@ -123,10 +123,12 @@ io.on("connection", function (socket){
         }
     });
     socket.on("restart", (playerIndex) => {
+        //change settins
+        players = playerIndex + 2; // if the index of input is 0, the players is two
+
         var ids = Object.keys(game.activePlayers);
         game = new Game();
         for(var id of ids){
-            console.log(id);
             setupPlayer(id);
         }
         first = true;
