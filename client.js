@@ -1,5 +1,7 @@
 var socket = io();
 
+socket.emit("startSync");
+
 socket.on("startSync", (x, y, tiles, players, tilesAvailable, numberOfActivePlayers) => {
     game.x = x; game.y = y;
     game.tiles = tiles;
@@ -44,4 +46,5 @@ socket.on("newPlayer", (x, y, num) => {
 
 socket.on("start", () => {
     game.ready = true;
+    console.log("start game");
 });

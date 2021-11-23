@@ -71,6 +71,7 @@ function addTile(){
         if(first){
             io.emit("start");
             first = false;
+            console.log("start");
         }
     }
 }
@@ -88,20 +89,14 @@ app.get("/game.js", function (req, res){
     res.sendFile(__dirname + "/game.js");
 });
 
+app.get("/manage", function(req, res){
+    res.sendFile(__dirname + "/manage.html");
+});
+
 io.on("connection", function (socket){
-    game.addPlayer(socket.id);
-    var player = game.activePlayers[socket.id];
-    var x = 0;
-    var y = 0;
-    var tiles = game.tiles;
-    var tilesAvailable = 0;
-    if(player){
-        x = player["x"];
-        y = player["y"];
-        tilesAvailable = player["tiles"];
-        io.emit("newPlayer", x, y, player["playerNum"]);
-    }
-    socket.emit("startSync", x, y, tiles, game.activePlayers, tilesAvailable, game.numberOfActivePlayers);
+    socket.on("startSync", () => {
+        setupPlayer(socket.id);
+    })
     if(game.numberOfActivePlayers > 1 && debugMode == true){
         game.numberOfActivePlayers = 0;
     }
@@ -127,7 +122,33 @@ io.on("connection", function (socket){
             io.emit("lose", socket.id, num);
         }
     });
+    socket.on("restart", (playerIndex) => {
+        var ids = Object.keys(game.activePlayers);
+        game = new Game();
+        for(var id of ids){
+            console.log(id);
+            setupPlayer(id);
+        }
+        first = true;
+        game.playing = true;
+    });
 });
+
+function setupPlayer(id){
+    game.addPlayer(id);
+    var player = game.activePlayers[id];
+    var x = 0;
+    var y = 0;
+    var tiles = game.tiles;
+    var tilesAvailable = 0;
+    if(player){
+        x = player["x"];
+        y = player["y"];
+        tilesAvailable = player["tiles"];
+        io.emit("newPlayer", x, y, player["playerNum"]);
+    }
+    io.to(id).emit("startSync", x, y, tiles, game.activePlayers, tilesAvailable, game.numberOfActivePlayers);
+}
 
 http.listen(8080, function(){
     console.log("port:8080");
