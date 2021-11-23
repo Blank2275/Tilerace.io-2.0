@@ -47,7 +47,7 @@ class Game{
             this.activePlayers[id] = {
                 "x": x,
                 "y": y,
-                "tiles": 10,
+                "tiles": 30,
                 "playerNum": this.numberOfActivePlayers
             }
             this.numberOfActivePlayers += 1;
@@ -95,6 +95,7 @@ app.get("/manage", function(req, res){
 
 io.on("connection", function (socket){
     socket.on("startSync", () => {
+        game.playersLoggedIn.push(socket.id);
         setupPlayer(socket.id);
     });
     if(game.numberOfActivePlayers > 1 && debugMode == true){
@@ -131,19 +132,20 @@ io.on("connection", function (socket){
         for(var id of ids){
             setupPlayer(id);
         }
+        game.playersLoggedIn = ids;
         first = true;
         game.playing = true;
     });
     socket.on("disconnect", () => {
         var index = game.playersLoggedIn.indexOf(socket.id);
-        game.playersLoggedIn.splice(index, 1);
-        console.log(index);
+        if(index !== -1){
+            game.playersLoggedIn.splice(index, 1);
+        }
     })
 });
 
 function setupPlayer(id){
     game.addPlayer(id);
-    game.playersLoggedIn.push(id);
     var player = game.activePlayers[id];
     var x = 0;
     var y = 0;

@@ -13,6 +13,7 @@ socket.on("startSync", (x, y, tiles, players, tilesAvailable, numberOfActivePlay
     game.homeY = y;
     game.playing = true;
     game.ready = false;
+    console.log(tiles);
 });
 
 socket.on("updatePlayers", (players) => {
