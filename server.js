@@ -12,7 +12,7 @@ class Game{
         this.width = 30;
         this.height = 30;
         this.tiles = [];
-        this.addTileFrequency = 2000;
+        this.addTileFrequency = 1000;
         this.playing = false;
         for(var y = 0; y < this.height; y++){
             this.tiles.push([]);
@@ -66,7 +66,7 @@ var players = 3;
 var game = new Game();
 var first = true;
 
-function addTile(){
+function gameTick(){
     if(game.playing){
         io.emit("addTile");
         if(first){
@@ -75,7 +75,7 @@ function addTile(){
         }
     }
 }
-setInterval(addTile, game.addTileFrequency);
+setInterval(gameTick, game.addTileFrequency);
 
 app.get("/", function (req, res){
     res.sendFile(__dirname + "/index.html");
@@ -134,7 +134,9 @@ io.on("connection", function (socket){
         }
         game.playersLoggedIn = ids;
         first = true;
-        game.playing = true;
+        if(Object.keys(game.activePlayers).length == players){
+            game.playing = true;
+        }
     });
     socket.on("disconnect", () => {
         var index = game.playersLoggedIn.indexOf(socket.id);

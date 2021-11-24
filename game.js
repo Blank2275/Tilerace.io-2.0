@@ -10,7 +10,7 @@ var playerNames = {
 }
 class Game{
     constructor(){
-        this.tileSize = 20;
+        this.tileSize = 100;
         this.placeRange = 6;
         this.maxEnemyInArea = 8;
         this.x = 0;
@@ -23,6 +23,8 @@ class Game{
         this.tilesAvailable = 10;
         this.playing = true;
         this.ready = false
+        this.invasionSpeed = 1.7;//how easily you can place tiles near enemies
+        this.maxTileStrength = 20;
     }
 }
 
@@ -63,19 +65,19 @@ function drawUI(){
 }
 
 function keyPressed(){
-    if (keyCode == RIGHT_ARROW && game.x < game.tiles[0].length - 1 && game.ready){
+    if ((keyCode == RIGHT_ARROW || keyCode == 68) && game.x < game.tiles[0].length - 1 && game.ready){
         game.x += 1;
         socket.emit("move", game.x, game.y);
     }
-    if (keyCode == LEFT_ARROW && game.x > 0 && game.ready){
+    if ((keyCode == LEFT_ARROW || keyCode == 65) && game.x > 0 && game.ready){
         game.x -= 1;
         socket.emit("move", game.x, game.y);
     }    
-    if (keyCode == UP_ARROW && game.y > 0 && game.ready){
+    if ((keyCode == UP_ARROW || keyCode == 87) && game.y > 0 && game.ready){
         game.y -= 1;
         socket.emit("move", game.x, game.y);
     }
-    if (keyCode == DOWN_ARROW && game.y < game.tiles.length - 1 && game.ready){
+    if ((keyCode == DOWN_ARROW || keyCode == 83) && game.y < game.tiles.length - 1 && game.ready){
         game.y += 1;
         socket.emit("move", game.x, game.y);
     }
@@ -88,7 +90,7 @@ function keyPressed(){
                     var tile = game.tiles[y][x];
                     if(tile["owner"] == game.playerNum){
                         placingPossible = true;
-                        enemyInArea -= tile["strength"];
+                        enemyInArea -= tile["strength"] * game.invasionSpeed;
                     } else{
                         if(tile["owner"] != -1){
                             enemyInArea += tile["strength"];
@@ -101,14 +103,16 @@ function keyPressed(){
             if(game.tilesAvailable > 0){
                 var tile = game.tiles[game.y][game.x];
                 if(enemyInArea < game.maxEnemyInArea && game.tilesAvailable >= tile["strength"]){
-                    socket.emit("placeTile", game.x, game.y, game.playerNum);
-                    if(game.playerNum !== tile["owner"] && tile["owner"] != -1){
-                        game.tilesAvailable -= tile["strength"];
-                        if(game.tilesAvailable < 1){
-                            game.tilesAvailable = 1;
+                    if(tile["strength"] < game.maxTileStrength){
+                        socket.emit("placeTile", game.x, game.y, game.playerNum);
+                        if(game.playerNum !== tile["owner"] && tile["owner"] != -1){
+                            game.tilesAvailable -= tile["strength"];
+                            if(game.tilesAvailable < 1){
+                                game.tilesAvailable = 1;
+                            }
                         }
+                        game.tilesAvailable -= 1;
                     }
-                    game.tilesAvailable -= 1;
                 }
             }
         }
