@@ -14,6 +14,8 @@ class Game{
         this.tiles = [];
         this.addTileFrequency = 1000;
         this.playing = false;
+        this.powerupProbability = 0.025;
+        this.maxPowerupPower = 40;
         for(var y = 0; y < this.height; y++){
             this.tiles.push([]);
             for(var x = 0; x < this.width; x++){
@@ -67,6 +69,18 @@ var game = new Game();
 var first = true;
 
 function gameTick(){
+    if(Math.random() < game.powerupProbability){
+        var x = Math.floor(Math.random() * game.width);
+        var y = Math.floor(Math.random() * game.height);
+        while(game.tiles[y][x]["owner"] != -1){
+            x = Math.floor(Math.random() * game.width);
+            y = Math.floor(Math.random() * game.height);          
+        }
+        var strength = Math.floor(Math.random() * (game.maxPowerupPower - 1) + 1);
+        game.tiles[y][x]["owner"] = -3;
+        game.tiles[y][x]["strength"] = strength;
+        io.emit("powerup", x, y, strength);
+    }
     if(game.playing){
         io.emit("addTile");
         if(first){

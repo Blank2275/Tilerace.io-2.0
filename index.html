@@ -14,7 +14,38 @@
             body{
                 background: linear-gradient(to bottom right,rgb(8, 86, 230), rgb(235, 61, 61));
             }
+            #mobile-buttons-container{
+                position: absolute;
+                left:calc(100% - 35vw);
+                top:calc(100% - 35vw);
+                width:33vw;
+                height:33vw;
+                border:2px solid rgba(0, 0, 0, 0.603);
+                display:grid;
+                grid-template-columns: auto auto auto;
+            }
+            .mobile-button{
+                width:11vw;
+                height:11vw;
+                background:rgba(0,0,0,0.2);
+                font-size:250%;
+            }
+            .mobile-empty{
+                width:11vw;
+                height:11vw;
+            }
         </style>
+        <div id = "mobile-buttons-container" class = "mobile-hide">
+            <div class = "mobile-empty mobile-hide" id = "right-button"></div>
+            <button class = "mobile-button mobile-hide" id = "right-button">Up</button>
+            <div class = "mobile-empty mobile-hide" id = "right-button"></div>
+            <button class = "mobile-button mobile-hide" id = "right-button">Left</button>
+            <button class = "mobile-button mobile-hide" id = "right-button">Place</button>
+            <button class = "mobile-button mobile-hide" id = "right-button">Right</button>
+            <div class = "mobile-empty mobile-hide" id = "right-button"></div>
+            <button class = "mobile-button mobile-hide" id = "right-button">Down</button>
+            <div class = "mobile-empty mobile-hide" id = "right-button"></div>
+        </div>
         <script src = "client.js"></script>
         <script src = "game.js"></script>
     </body>

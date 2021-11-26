@@ -47,3 +47,8 @@ socket.on("newPlayer", (x, y, num) => {
 socket.on("start", () => {
     game.ready = true;
 });
+
+socket.on("powerup", (x, y, strength) => {
+    game.tiles[y][x]["owner"] = -3;
+    game.tiles[y][x]["strength"] = strength;
+})

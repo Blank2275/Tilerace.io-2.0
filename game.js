@@ -10,7 +10,7 @@ var playerNames = {
 }
 class Game{
     constructor(){
-        this.tileSize = 100;
+        this.tileSize = 100;//100
         this.placeRange = 6;
         this.maxEnemyInArea = 8;
         this.x = 0;
@@ -34,6 +34,19 @@ function setup(){
 
 var game = new Game();
 var frameCount = 0;
+
+window.onload = function(){
+    if(true){
+    //if(!( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) )){
+        //show mobile buttons
+        var elementsToHide = document.getElementsByClassName("mobile-hide");
+        console.log("hide")
+        for(var element in elementsToHide){
+            elementsToHide[element].style.display = "none";
+            elementsToHide[element].style.pointerEvents = "none";
+        }
+    }
+}
 
 function draw(){
     clear();
@@ -64,58 +77,76 @@ function drawUI(){
     text(`Tiles: ${game.tilesAvailable}`, 10, 35)
 }
 
-function keyPressed(){
-    if ((keyCode == RIGHT_ARROW || keyCode == 68) && game.x < game.tiles[0].length - 1 && game.ready){
-        game.x += 1;
-        socket.emit("move", game.x, game.y);
-    }
-    if ((keyCode == LEFT_ARROW || keyCode == 65) && game.x > 0 && game.ready){
-        game.x -= 1;
-        socket.emit("move", game.x, game.y);
-    }    
-    if ((keyCode == UP_ARROW || keyCode == 87) && game.y > 0 && game.ready){
-        game.y -= 1;
-        socket.emit("move", game.x, game.y);
-    }
-    if ((keyCode == DOWN_ARROW || keyCode == 83) && game.y < game.tiles.length - 1 && game.ready){
-        game.y += 1;
-        socket.emit("move", game.x, game.y);
-    }
-    if(keyCode == 32 && game.playing && game.ready){
-        var placingPossible = false;
-        var enemyInArea = 0;
-        for(var y = game.y - game.placeRange; y < game.y + game.placeRange; y++){
-            for(var x = game.x - game.placeRange; x < game.x + game.placeRange; x++){
-                if(x >= 0 && y >= 0 && x < game.tiles[0].length && y < game.tiles.length){
-                    var tile = game.tiles[y][x];
-                    if(tile["owner"] == game.playerNum){
-                        placingPossible = true;
-                        enemyInArea -= tile["strength"] * game.invasionSpeed;
-                    } else{
-                        if(tile["owner"] != -1){
-                            enemyInArea += tile["strength"];
-                        }
+function move(x, y){
+    game.x += x;
+    game.y += y;
+    socket.emit("move", game.x, game.y);
+}
+
+function place(){
+    var placingPossible = false;
+    var enemyInArea = 0;
+    for(var y = game.y - game.placeRange; y < game.y + game.placeRange; y++){
+        for(var x = game.x - game.placeRange; x < game.x + game.placeRange; x++){
+            if(x >= 0 && y >= 0 && x < game.tiles[0].length && y < game.tiles.length){
+                var tile = game.tiles[y][x];
+                if(tile["owner"] == game.playerNum){
+                    placingPossible = true;
+                    enemyInArea -= tile["strength"] * game.invasionSpeed;
+                } else{
+                    if(tile["owner"] != -1 && tile["owner"] != -3){
+                        enemyInArea += tile["strength"];
                     }
                 }
-            }   
-        }
-        if(placingPossible){
-            if(game.tilesAvailable > 0){
-                var tile = game.tiles[game.y][game.x];
-                if(enemyInArea < game.maxEnemyInArea && game.tilesAvailable >= tile["strength"]){
-                    if(tile["strength"] < game.maxTileStrength){
-                        socket.emit("placeTile", game.x, game.y, game.playerNum);
-                        if(game.playerNum !== tile["owner"] && tile["owner"] != -1){
+            }
+        }   
+    }
+    if(placingPossible){
+        if(game.tilesAvailable > 0){
+            var tile = game.tiles[game.y][game.x];
+            if(enemyInArea < game.maxEnemyInArea && (game.tilesAvailable >= tile["strength"] || tile["owner"] == -3)){
+                if(tile["strength"] < game.maxTileStrength || tile["owner"] == -3){
+                    socket.emit("placeTile", game.x, game.y, game.playerNum);
+                    if(game.playerNum !== tile["owner"] && tile["owner"] != -1){
+                        if(tile["owner"] == -3){
+                            game.tilesAvailable += tile["strength"] + 1;
+                        } else{
                             game.tilesAvailable -= tile["strength"];
                             if(game.tilesAvailable < 1){
                                 game.tilesAvailable = 1;
                             }
                         }
-                        game.tilesAvailable -= 1;
                     }
+                    game.tilesAvailable -= 1;
                 }
             }
         }
+    }
+}
+
+function keyPressed(){
+    if ((keyCode == RIGHT_ARROW || keyCode == 68) && game.x < game.tiles[0].length - 1 && game.ready){
+        //game.x += 1;
+        //socket.emit("move", game.x, game.y);
+        move(1, 0);
+    }
+    if ((keyCode == LEFT_ARROW || keyCode == 65) && game.x > 0 && game.ready){
+        //game.x -= 1;
+        //socket.emit("move", game.x, game.y);
+        move(-1,0)
+    }    
+    if ((keyCode == UP_ARROW || keyCode == 87) && game.y > 0 && game.ready){
+        //game.y -= 1;
+        //socket.emit("move", game.x, game.y);
+        move(0, -1);
+    }
+    if ((keyCode == DOWN_ARROW || keyCode == 83) && game.y < game.tiles.length - 1 && game.ready){
+        //game.y += 1;
+        //socket.emit("move", game.x, game.y);
+        move(0, 1);
+    }
+    if(keyCode == 32 && game.playing && game.ready){
+        place();
     }
 }
 
@@ -144,6 +175,12 @@ function drawTiles(){
                 
                 if(owner == -1){
                     fill(235);
+                } else if(owner == -3){
+                    var powerupColor = [235, 210, 52];
+                    var powerupR = powerupColor[0] / 50 * strength + 50;
+                    var powerupG = powerupColor[1] / 50 * strength + 50;
+                    var powerupB = powerupColor[2] / 50 * strength + 20;
+                    fill(powerupR, powerupG, powerupB);
                 } else{
                     var color = [colors[owner][0], colors[owner][1], colors[owner][2]];
                     color = color == undefined ? [255, 255, 255] : color;
