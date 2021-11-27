@@ -127,7 +127,7 @@ function place(){
         if(game.tilesAvailable > 0){
             var tile = game.tiles[game.y][game.x];
             if(enemyInArea < game.maxEnemyInArea && (game.tilesAvailable >= tile["strength"] || tile["owner"] == -3)){
-                if(tile["strength"] < game.maxTileStrength || tile["owner"] == -3){
+                if(tile["strength"] < game.maxTileStrength || tile["owner"] == -3 || tile["owner"] !== game.playerNum){//spagettie code
                     socket.emit("placeTile", game.x, game.y, game.playerNum);
                     if(game.playerNum !== tile["owner"] && tile["owner"] != -1){
                         if(tile["owner"] == -3){
