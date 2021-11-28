@@ -36,8 +36,8 @@ var game = new Game();
 var frameCount = 0;
 
 window.onload = function(){
-    if(true){
-    //if(!( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) )){
+    //if(true){
+    if(!( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) )){
         //show mobile buttons
         var elementsToHide = document.getElementsByClassName("mobile-hide");
         console.log("hide")
@@ -45,6 +45,8 @@ window.onload = function(){
             elementsToHide[element].style.display = "none";
             elementsToHide[element].style.pointerEvents = "none";
         }
+    } else{
+        strokeWeight(3);
     }
 }
 
@@ -75,6 +77,26 @@ function drawUI(){
     fill(220, 40, 70);
     textSize(30);
     text(`Tiles: ${game.tilesAvailable}`, 10, 35)
+}
+
+function mobileAction(action){
+    switch(action){
+        case "up":
+            move(0, -1);
+            break;
+        case "down":
+            move(0, 1);
+            break;
+        case "left":
+            move(-1, 0);
+            break;
+        case "right":
+            move(1, 0);
+            break;
+        case "place":
+            place();
+            break;
+    }
 }
 
 function move(x, y){

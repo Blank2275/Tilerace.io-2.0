@@ -16,34 +16,38 @@
             }
             #mobile-buttons-container{
                 position: absolute;
-                left:calc(100% - 35vw);
-                top:calc(100% - 35vw);
-                width:33vw;
-                height:33vw;
+                left:calc(100% - min(50vw, 75vh));
+                top:calc(100% - min(50vw, 75vh));
+                width:min(50vw, 75vh);
+                height:min(50vw, 75vh);
                 border:2px solid rgba(0, 0, 0, 0.603);
                 display:grid;
                 grid-template-columns: auto auto auto;
             }
             .mobile-button{
-                width:11vw;
-                height:11vw;
+                width:min(16vw, 25vh);
+                height:min(16vw, 25vh);
                 background:rgba(0,0,0,0.2);
                 font-size:250%;
+                color:black;
+                touch-action: manipulation;
+                text-align:center;
             }
             .mobile-empty{
-                width:11vw;
-                height:11vw;
+                width:min(16vw, 25vh);
+                height:min(16vw, 25vh);
+                touch-action: manipulation;
             }
         </style>
         <div id = "mobile-buttons-container" class = "mobile-hide">
             <div class = "mobile-empty mobile-hide" id = "right-button"></div>
-            <button class = "mobile-button mobile-hide" id = "right-button">Up</button>
+            <button class = "mobile-button mobile-hide" id = "right-button" onclick = "mobileAction('up')">up</button>
             <div class = "mobile-empty mobile-hide" id = "right-button"></div>
-            <button class = "mobile-button mobile-hide" id = "right-button">Left</button>
-            <button class = "mobile-button mobile-hide" id = "right-button">Place</button>
-            <button class = "mobile-button mobile-hide" id = "right-button">Right</button>
+            <button class = "mobile-button mobile-hide" id = "right-button"onclick = "mobileAction('left')">left</button>
+            <button class = "mobile-button mobile-hide" id = "right-button" onclick = "mobileAction('place')">⚪</button>
+            <button class = "mobile-button mobile-hide" id = "right-button" onclick = "mobileAction('right')">right</button>
             <div class = "mobile-empty mobile-hide" id = "right-button"></div>
-            <button class = "mobile-button mobile-hide" id = "right-button">Down</button>
+            <button class = "mobile-button mobile-hide" id = "right-button" onclick = "mobileAction('down')">down</button>
             <div class = "mobile-empty mobile-hide" id = "right-button"></div>
         </div>
         <script src = "client.js"></script>
