@@ -18,6 +18,7 @@ class Game{
         this.homeY = 0;
         this.homeX = 0;
         this.tiles = [];
+        this.tileAvailabilities = [];
         this.activePlayers = {};
         this.playerNum = -1;
         this.tilesAvailable = 10;
@@ -26,7 +27,41 @@ class Game{
         this.invasionSpeed = 1.7;//how easily you can place tiles near enemies
         this.maxTileStrength = 20;
     }
+    generateTileAvailabilities(){
+        this.tileAvailabilities = [];
+        for(var y in this.tiles){
+            this.tileAvailabilities.push([]);
+            for(var x in this.tiles[y]){
+                this.tileAvailabilities[y].push(0);
+            }
+        }
+        for(var y in this.tiles){
+            for(var x in this.tiles[y]){
+                if(this.tiles[y][x]["strength"] !== 1){
+                //
+                    for(var y1 = y - this.placeRange; y1 < y + this.placeRange; y1++){
+                        for(var x1 = x - this.placeRange; x1 < x + this.placeRange; x1++){
+                            if(x1 >= 0 && y1 >= 0 && x1 < this.tiles[0].length && y1 < game.tiles.length){
+                                var tile = this.tiles[y1][x1];
+                                var enemyInArea = 0;
+                                if(tile["owner"] == this.playerNum){
+                                    enemyInArea -= tile["strength"] * this.invasionSpeed;
+                                } else{
+                                    if(tile["owner"] != -1 && tile["owner"] != -3){
+                                        enemyInArea += tile["strength"];
+                                    }
+                                }
+                                this.tileAvailabilities[y1][x1] += enemyInArea;
+                            }
+                        }   
+                    }
+                //
+                }
+            }
+        }
+    }
 }
+
 
 function setup(){
     createCanvas(windowWidth / 1.05, windowHeight / 1.05);
@@ -194,6 +229,15 @@ function drawTiles(){
                 var tile = game.tiles[y][x];
                 var owner = tile["owner"];
                 var strength = tile["strength"];
+                
+                if(game.tileAvailabilities.length > 0){
+                    var enemyInArea = game.tileAvailabilities[y][x];
+                    var scaledEnemyInArea = 255 + ((enemyInArea + 20) * (255 / 40));
+                    if(scaledEnemyInArea < 0){scaledEnemyInArea = 0}
+                    if(scaledEnemyInArea > 255){scaledEnemyInArea = 255}
+                    
+                    stroke(scaledEnemyInArea);
+                }
                 
                 if(owner == -1){
                     fill(235);
