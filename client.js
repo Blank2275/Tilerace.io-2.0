@@ -21,6 +21,7 @@ socket.on("updatePlayers", (players) => {
 });
 
 socket.on("placeTile", (x, y, id, num) => {
+    game.tiles[y][x]["owner"] = num;
     if(game.tiles[y][x]["owner"] != num){
         for(var y1 = y - game.placeRange; y1 < y + game.placeRange; y1++){
             for(var x1 = x - game.placeRange; x1 < x + game.placeRange; x1++){
@@ -30,9 +31,9 @@ socket.on("placeTile", (x, y, id, num) => {
                 }
             }       
         }
-        game.tiles[y][x]["owner"] = num;
         game.tiles[y][x]["strength"] = 0;
     } else{
+    
         for(var y1 = y - game.placeRange; y1 < y + game.placeRange; y1++){
             for(var x1 = x - game.placeRange; x1 < x + game.placeRange; x1++){
                 if(x1 >= 0 && y1 >= 0 && x1 < game.tiles[0].length && y1 < game.tiles.length){
@@ -57,6 +58,7 @@ socket.on("newPlayer", (x, y, num) => {
     if(game.playerNum != -1){
         game.tiles[y][x]["owner"] = num;
         game.tiles[y][x]["strength"] = 10;
+        game.generateTileAvailabilities();
     }
 });
 
