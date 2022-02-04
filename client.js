@@ -21,28 +21,37 @@ socket.on("updatePlayers", (players) => {
 });
 
 socket.on("placeTile", (x, y, id, num) => {
-    game.tiles[y][x]["owner"] = num;
     if(game.tiles[y][x]["owner"] != num){
-        for(var y1 = y - game.placeRange; y1 < y + game.placeRange; y1++){
-            for(var x1 = x - game.placeRange; x1 < x + game.placeRange; x1++){
-                if(x1 >= 0 && y1 >= 0 && x1 < game.tiles[0].length && y1 < game.tiles.length){
-                    game.tileAvailabilities[y1][x1] += game.tiles[y][x]["strength"];
-                    console.log(game.tileAvailabilities[y1][x1])
-                }
-            }       
-        }
-        game.tiles[y][x]["strength"] = 0;
+    game.tiles[y][x]["strength"] = 0;
+        // for(var y1 = y - game.placeRange; y1 < y + game.placeRange; y1++){
+        //     for(var x1 = x - game.placeRange; x1 < x + game.placeRange; x1++){
+        //         if(x1 >= 0 && y1 >= 0 && x1 < game.tiles[0].length && y1 < game.tiles.length){
+        //             game.tileAvailabilities[y1][x1] += game.tiles[y][x]["strength"];
+        //             console.log(game.tileAvailabilities[y1][x1])
+        //         }
+        //     }       
+        // }
     } else{
-    
+    }
+    if(num == game.playerNum){
         for(var y1 = y - game.placeRange; y1 < y + game.placeRange; y1++){
             for(var x1 = x - game.placeRange; x1 < x + game.placeRange; x1++){
                 if(x1 >= 0 && y1 >= 0 && x1 < game.tiles[0].length && y1 < game.tiles.length){
                     game.tileAvailabilities[y1][x1] -= game.invasionSpeed;
                 }
             }       
+        }    
+    } else {
+        for(var y1 = y - game.placeRange; y1 < y + game.placeRange; y1++){
+            for(var x1 = x - game.placeRange; x1 < x + game.placeRange; x1++){
+                if(x1 >= 0 && y1 >= 0 && x1 < game.tiles[0].length && y1 < game.tiles.length){
+                    game.tileAvailabilities[y1][x1] += game.tiles[y][x]["strength"];;
+                }
+            }       
         }
     }
     game.tiles[y][x]["strength"] += 1;
+    game.tiles[y][x]["owner"] = num;
 });
 
 socket.on("addTile", () => {
