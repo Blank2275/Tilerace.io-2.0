@@ -18,15 +18,50 @@ class Game{
         this.homeY = 0;
         this.homeX = 0;
         this.tiles = [];
+        this.tileAvailabilities = [];
         this.activePlayers = {};
         this.playerNum = -1;
         this.tilesAvailable = 10;
         this.playing = true;
         this.ready = false
-        this.invasionSpeed = 1.7;//how easily you can place tiles near enemies
+        this.invasionSpeed = 0.6;//how easily you can place tiles near enemies
         this.maxTileStrength = 20;
     }
+    generateTileAvailabilities(){
+        this.tileAvailabilities = [];
+        for(var y in this.tiles){
+            this.tileAvailabilities.push([]);
+            for(var x in this.tiles[y]){
+                this.tileAvailabilities[y].push(0);
+            }
+        }
+        for(var y in this.tiles){
+            for(var x in this.tiles[y]){
+                if(this.tiles[y][x]["strength"] !== 1){
+                //
+                    for(var y1 = y - this.placeRange; y1 < y + this.placeRange; y1++){
+                        for(var x1 = x - this.placeRange; x1 < x + this.placeRange; x1++){
+                            if(x1 >= 0 && y1 >= 0 && x1 < this.tiles[0].length && y1 < game.tiles.length){
+                                var tile = this.tiles[y][x];
+                                var enemyInArea = 0;
+                                if(tile["owner"] == this.playerNum){
+                                    enemyInArea -= tile["strength"] * this.invasionSpeed;
+                                } else{
+                                    if(tile["owner"] != -1 && tile["owner"] != -3){
+                                        enemyInArea += tile["strength"];
+                                    }
+                                }
+                                this.tileAvailabilities[y1][x1] += enemyInArea;
+                            }
+                        }   
+                    }
+                //
+                }
+            }
+        }
+    }
 }
+
 
 function setup(){
     createCanvas(windowWidth / 1.05, windowHeight / 1.05);
@@ -40,10 +75,9 @@ window.onload = function(){
     if(!( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) )){
         //show mobile buttons
         var elementsToHide = document.getElementsByClassName("mobile-hide");
-        console.log("hide")
-        for(var element in elementsToHide){
-            elementsToHide[element].style.display = "none";
-            elementsToHide[element].style.pointerEvents = "none";
+        for(var element of elementsToHide){
+            element.style.display = "none";
+            element.style.pointerEvents = "none";
         }
     } else{
         strokeWeight(3);
@@ -120,6 +154,7 @@ function place(){
                         enemyInArea += tile["strength"];
                     }
                 }
+                console.log(enemyInArea)
             }
         }   
     }
@@ -127,7 +162,7 @@ function place(){
         if(game.tilesAvailable > 0){
             var tile = game.tiles[game.y][game.x];
             if(enemyInArea < game.maxEnemyInArea && (game.tilesAvailable >= tile["strength"] || tile["owner"] == -3)){
-                if(tile["strength"] < game.maxTileStrength || tile["owner"] == -3 || tile["owner"] !== game.playerNum){//spagettie code
+                if(tile["strength"] < game.maxTileStrength || tile["owner"] == -3 || tile["owner"] !== game.playerNum){//spaghetti code
                     socket.emit("placeTile", game.x, game.y, game.playerNum);
                     if(game.playerNum !== tile["owner"] && tile["owner"] != -1){
                         if(tile["owner"] == -3){
@@ -195,6 +230,35 @@ function drawTiles(){
                 var owner = tile["owner"];
                 var strength = tile["strength"];
                 
+                if(game.tileAvailabilities.length > 0){
+                    var enemyInArea = game.tileAvailabilities[y][x];
+                    var scaledEnemyInArea = 0 + ((enemyInArea + 60) * (255 / 10));
+                    if(scaledEnemyInArea < 0){scaledEnemyInArea = 0}
+                    if(scaledEnemyInArea > 255){scaledEnemyInArea = 255}
+                    scaledEnemyInArea /= 255
+                    
+                    const red = [230, 39, 39];
+                    const green = [58, 222, 55];
+                    
+                    const rr = red[0];
+                    const rg = red[1];
+                    const rb = red[2];
+                    
+                    const gr = green[0];
+                    const gg = green[1];
+                    const gb = green[2];
+                    
+                    //const ar = gr + (rr - gr) * scaledEnemyInArea;
+                    //const ag = gg + (rg - gg) * scaledEnemyInArea;
+                    //const ab = gb + (rb - gb) * scaledEnemyInArea;
+                    var tileCloseEnough = false;
+                    if(enemyInArea < game.maxEnemyInArea){
+                        stroke(gr, gb, gg);
+                    } else {
+                        stroke(rr, rg, rb);
+                    }
+                }
+                
                 if(owner == -1){
                     fill(235);
                 } else if(owner == -3){
@@ -212,9 +276,11 @@ function drawTiles(){
                     color[2] *= brightnesMultiplier;
                     fill(color[0], color[1], color[2]);
                 }
-
+                strokeWeight(3)
                 rect(xAdj, yAdj, game.tileSize, game.tileSize);
-
+                strokeWeight(1)
+                //fill(0)
+                //text((Math.floor(enemyInArea * 10) / 10).toString(), xAdj, yAdj);
                 //draw players
                 for(var key of Object.keys(game.activePlayers)){
                     var player = game.activePlayers[key];
