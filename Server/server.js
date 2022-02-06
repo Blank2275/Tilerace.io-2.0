@@ -5,6 +5,22 @@ var path = require('path');
 
 var debugMode  = false;
 
+app.get("/", function (req, res){
+    res.sendFile(path.resolve("../Web/index.html"));
+});
+
+app.get("/client.js", function (req, res){
+    res.sendFile(path.resolve("../Web/client.js"));
+});
+
+app.get("/game.js", function (req, res){
+    res.sendFile(path.resolve("../Web/game.js"));
+});
+
+app.get("/manage", function(req, res){
+    res.sendFile(__dirname + "/manage.html");
+});
+
 class Game{
     constructor(){
         this.numberOfActivePlayers = 0;
@@ -17,6 +33,7 @@ class Game{
         this.playing = false;
         this.powerupProbability = 0.025;
         this.maxPowerupPower = 40;
+        this.players = 2;
         for(var y = 0; y < this.height; y++){
             this.tiles.push([]);
             for(var x = 0; x < this.width; x++){
@@ -28,7 +45,7 @@ class Game{
         }
     }
     addPlayer(id){
-        if(this.numberOfActivePlayers < players){
+        if(this.numberOfActivePlayers < this.players){
             var x = 0;
             var y = 0;
             if(this.numberOfActivePlayers == 0){
@@ -54,18 +71,14 @@ class Game{
                 "playerNum": this.numberOfActivePlayers
             }
             this.numberOfActivePlayers += 1;
-            if(this.numberOfActivePlayers == players){
+            if(this.numberOfActivePlayers == this.players){
                 this.playing = true;
             }
         }
     }
 }
 
-class Player{
-    
-}
-
-var players = 3;
+//var players = 3;
 var game = new Game();
 var first = true;
 
@@ -92,21 +105,21 @@ function gameTick(){
 }
 setInterval(gameTick, game.addTileFrequency);
 
-app.get("/", function (req, res){
-    res.sendFile(path.resolve("../Web/index.html"));
-});
-
-app.get("/client.js", function (req, res){
-    res.sendFile(path.resolve("../Web/client.js"));
-});
-
-app.get("/game.js", function (req, res){
-    res.sendFile(path.resolve("../Web/game.js"));
-});
-
-app.get("/manage", function(req, res){
-    res.sendFile(__dirname + "/manage.html");
-});
+function setupPlayer(id){
+    game.addPlayer(id);
+    var player = game.activePlayers[id];
+    var x = 0;
+    var y = 0;
+    var tiles = game.tiles;
+    var tilesAvailable = 0;
+    if(player){
+        x = player["x"];
+        y = player["y"];
+        tilesAvailable = player["tiles"];
+        io.emit("newPlayer", x, y, player["playerNum"]);
+    }
+    io.to(id).emit("startSync", x, y, tiles, game.activePlayers, tilesAvailable, game.numberOfActivePlayers);
+}
 
 io.on("connection", function (socket){
     socket.on("startSync", () => {
@@ -140,8 +153,8 @@ io.on("connection", function (socket){
     });
     socket.on("restart", (playerIndex) => {
         //change settings
-        players = playerIndex + 2; // if the index of input is 0, the players is two
-
+        game.players = playerIndex + 2; // if the index of input is 0, the players is two
+        
         var ids = game.playersLoggedIn;
         game = new Game();
         for(var id of ids){
@@ -149,7 +162,9 @@ io.on("connection", function (socket){
         }
         game.playersLoggedIn = ids;
         first = true;
-        if(Object.keys(game.activePlayers).length == players){
+        console.log(Object.keys(game.activePlayers).length);
+        console.log(game.players)
+        if(Object.keys(game.activePlayers).length == game.players){
             game.playing = true;
         }
     });
@@ -161,34 +176,17 @@ io.on("connection", function (socket){
     })
 });
 
-function setupPlayer(id){
-    game.addPlayer(id);
-    var player = game.activePlayers[id];
-    var x = 0;
-    var y = 0;
-    var tiles = game.tiles;
-    var tilesAvailable = 0;
-    if(player){
-        x = player["x"];
-        y = player["y"];
-        tilesAvailable = player["tiles"];
-        io.emit("newPlayer", x, y, player["playerNum"]);
-    }
-    io.to(id).emit("startSync", x, y, tiles, game.activePlayers, tilesAvailable, game.numberOfActivePlayers);
-}
-
 exports.restart = (playerIndex) => {
     //change settings
-    players = playerIndex + 2; // if the index of input is 0, the players is two
-
     var ids = game.playersLoggedIn;
     game = new Game();
+    game.players = playerIndex + 2; // if the index of input is 0, the players is two
     for(var id of ids){
         setupPlayer(id);
     }
     game.playersLoggedIn = ids;
     first = true;
-    if(Object.keys(game.activePlayers).length == players){
+    if(Object.keys(game.activePlayers).length == game.players){
         game.playing = true;
     }
 }
