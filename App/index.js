@@ -8,11 +8,12 @@ function createWindow(){
     const window = new BrowserWindow({
         width:800,
         height:600,
-        frame:false,
+        frame:true,
         webPreferences:{
             preload: path.join(__dirname, 'src', 'preload.js')
         }
     });
+    window.setMenu(null);
     window.loadFile("./HTML/manage.html");
 }
 app.whenReady().then(() => {

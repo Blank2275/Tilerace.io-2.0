@@ -54,6 +54,12 @@
                 grid-column: 1;
                 grid-row: 2;
             }
+            #QRinstructions{
+                text-align:center;
+            }
+            #urlDisplay{
+                text-align:center;
+            }
         </style>
         <div id = "main-area">
             <div id = "main-form">
@@ -62,6 +68,8 @@
                     <option>3 Players</option>
                 </select>
                 <canvas id="qrcode"></canvas>
+                <p id = "QRinstructions">scan qrcode to open website on mobile</p>
+                <p id = "urlDisplay"></p>
                 <button type="submit" id = "submit">Restart</button>
             </div>
         </div>

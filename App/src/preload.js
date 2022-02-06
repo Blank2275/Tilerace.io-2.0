@@ -6,7 +6,9 @@ window.addEventListener('DOMContentLoaded', () => {
     var qrcanvas = document.getElementById('qrcode');
     //var ip = os.networkInterfaces()['venet0:0'][0].address;
     var address = ip.address();
-    QRCode.toCanvas(qrcanvas, `http://${address}:8080`, (err) => {
+    var url = `http://${address}:8080`;
+    document.getElementById('urlDisplay').innerHTML = `go to: ${url}`;
+    QRCode.toCanvas(qrcanvas, url, (err) => {
         if(err) console.error(err);
         console.log('succesfully made qr code')
     })
