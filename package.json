@@ -20,6 +20,10 @@
   "dependencies": {
     "experss": "^0.0.1-security",
     "express": "^4.17.1",
+    "path": "^0.12.7",
     "socket.io": "^4.4.0"
+  },
+  "devDependencies": {
+    "electron": "^17.0.0"
   }
 }

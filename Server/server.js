@@ -1,6 +1,7 @@
 var app = require('express')();
 var http = require('http').createServer(app);
 var io = require('socket.io')(http);
+var path = require('path');
 
 var debugMode  = false;
 
@@ -92,15 +93,15 @@ function gameTick(){
 setInterval(gameTick, game.addTileFrequency);
 
 app.get("/", function (req, res){
-    res.sendFile(__dirname + "/index.html");
+    res.sendFile(path.resolve("../Web/index.html"));
 });
 
 app.get("/client.js", function (req, res){
-    res.sendFile(__dirname + "/client.js");
+    res.sendFile(path.resolve("../Web/client.js"));
 });
 
 app.get("/game.js", function (req, res){
-    res.sendFile(__dirname + "/game.js");
+    res.sendFile(path.resolve("../Web/game.js"));
 });
 
 app.get("/manage", function(req, res){
@@ -138,7 +139,7 @@ io.on("connection", function (socket){
         }
     });
     socket.on("restart", (playerIndex) => {
-        //change settins
+        //change settings
         players = playerIndex + 2; // if the index of input is 0, the players is two
 
         var ids = game.playersLoggedIn;
@@ -176,6 +177,24 @@ function setupPlayer(id){
     io.to(id).emit("startSync", x, y, tiles, game.activePlayers, tilesAvailable, game.numberOfActivePlayers);
 }
 
-http.listen(8080, function(){
-    console.log("port:8080");
-})
+exports.restart = (playerIndex) => {
+    //change settings
+    players = playerIndex + 2; // if the index of input is 0, the players is two
+
+    var ids = game.playersLoggedIn;
+    game = new Game();
+    for(var id of ids){
+        setupPlayer(id);
+    }
+    game.playersLoggedIn = ids;
+    first = true;
+    if(Object.keys(game.activePlayers).length == players){
+        game.playing = true;
+    }
+}
+
+exports.startServer = () => {
+    http.listen(8080, function(){
+        console.log("port:8080");
+    });
+}

@@ -2,15 +2,16 @@
 <html>
     <head>
         <title>Tilerace.io Manage</title>
-        <script src = "/socket.io/socket.io.js"></script>
     </head>
     <body>
         <style>
             html, body{
                 height:100%;
+                overflow: hidden;
             }
             body{
                 background: linear-gradient(to bottom right,rgb(8, 86, 230), rgb(235, 61, 61));
+                overflow: hidden;
             }
             #main-area{
                 width:30%;
@@ -45,16 +46,11 @@
                     <option>2 Players</option>
                     <option>3 Players</option>
                 </select>
-                <button type="submit" id = "submit" onclick = "restart(event)">Restart</button>
+                <button type="submit" id = "submit">Restart</button>
             </form>
+            <p id = "lol">
+            XD
+            </p>
         </div>
-        <script>
-            var socket = io();
-            function restart(e){
-                e.preventDefault();
-                var playersIndex = document.getElementById("num-players").selectedIndex;
-                socket.emit("restart", playersIndex);
-            }
-        </script>
     </body>
 </html>
