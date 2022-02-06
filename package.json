@@ -20,7 +20,9 @@
   "dependencies": {
     "experss": "^0.0.1-security",
     "express": "^4.17.1",
+    "ip": "^1.1.5",
     "path": "^0.12.7",
+    "qrcode": "^1.5.0",
     "socket.io": "^4.4.0"
   },
   "devDependencies": {
