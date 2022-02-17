@@ -1,12 +1,14 @@
 var colors = {
     0: [240, 30, 60],
     1: [30, 70, 240], 
-    2: [30, 240, 65]
+    2: [30, 240, 65], 
+    3: [162, 0, 255]
 }
 var playerNames = {
     0: "Red",
     1: "Blue",
-    2: "Green"
+    2: "Green",
+    3: "Purple"
 }
 class Game{
     constructor(){
