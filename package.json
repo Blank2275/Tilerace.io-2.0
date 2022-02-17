@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "test": "run",
-    "start": "node server.js"
+    "start": "electron ./App"
   },
   "repository": {
     "type": "git",
@@ -27,5 +27,6 @@
   },
   "devDependencies": {
     "electron": "^17.0.0"
-  }
+  },
+  "icon": "./Assets/blueTiles.jpeg"
 }

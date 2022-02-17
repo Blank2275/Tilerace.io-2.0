@@ -60,6 +60,10 @@ class Game{
                 x = Math.floor(this.width / 2);
                 y = 0;
             }
+            if(this.numberOfActivePlayers == 3){
+                x = Math.floor(this.width / 2);
+                y = this.height - 1;           
+            }
             this.tiles[y][x] = {
                 "owner": this.numberOfActivePlayers,
                 "strength": 10
