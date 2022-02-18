@@ -1,8 +1,8 @@
 function place(){
     var placingPossible = false;
     var enemyInArea = 0;
-    for(var y = game.y - game.placeRange; y < game.y + game.placeRange; y++){
-        for(var x = game.x - game.placeRange; x < game.x + game.placeRange; x++){
+    for(var y = game.realY - game.placeRange; y < game.realY + game.placeRange; y++){
+        for(var x = game.realX - game.placeRange; x < game.realX + game.placeRange; x++){
             if(x >= 0 && y >= 0 && x < game.tiles[0].length && y < game.tiles.length){
                 var tile = game.tiles[y][x];
                 if(tile["owner"] == game.playerNum){
@@ -19,10 +19,10 @@ function place(){
     }
     if(placingPossible){
         if(game.tilesAvailable > 0){
-            var tile = game.tiles[game.y][game.x];
+            var tile = game.tiles[game.realY][game.realX];
             if(enemyInArea < game.maxEnemyInArea && (game.tilesAvailable >= tile["strength"] || tile["owner"] == -3)){
                 if(tile["strength"] < game.maxTileStrength || tile["owner"] == -3 || tile["owner"] !== game.playerNum){//spaghetti code
-                    socket.emit("placeTile", game.x, game.y, game.playerNum);
+                    socket.emit("placeTile", game.realX, game.realY, game.playerNum);
                     if(game.playerNum !== tile["owner"] && tile["owner"] != -1){
                         if(tile["owner"] == -3){
                             game.tilesAvailable += tile["strength"] + 1;
@@ -41,22 +41,22 @@ function place(){
 }
 
 function keyPressed(){
-    if ((keyCode == RIGHT_ARROW || keyCode == 68) && game.x < game.tiles[0].length - 1 && game.ready){
+    if ((keyCode == RIGHT_ARROW || keyCode == 68) && game.realX < game.tiles[0].length - 1 && game.ready){
         //game.x += 1;
         //socket.emit("move", game.x, game.y);
         move(1, 0);
     }
-    if ((keyCode == LEFT_ARROW || keyCode == 65) && game.x > 0 && game.ready){
+    if ((keyCode == LEFT_ARROW || keyCode == 65) && game.realX > 0 && game.ready){
         //game.x -= 1;
         //socket.emit("move", game.x, game.y);
         move(-1,0)
     }    
-    if ((keyCode == UP_ARROW || keyCode == 87) && game.y > 0 && game.ready){
+    if ((keyCode == UP_ARROW || keyCode == 87) && game.realY > 0 && game.ready){
         //game.y -= 1;
         //socket.emit("move", game.x, game.y);
         move(0, -1);
     }
-    if ((keyCode == DOWN_ARROW || keyCode == 83) && game.y < game.tiles.length - 1 && game.ready){
+    if ((keyCode == DOWN_ARROW || keyCode == 83) && game.realY < game.tiles.length - 1 && game.ready){
         //game.y += 1;
         //socket.emit("move", game.x, game.y);
         move(0, 1);
@@ -70,16 +70,17 @@ function drawTiles(){
     var tiles = game.tiles;
     var xTileMax = windowWidth / game.tileSize;
     var yTileMax = windowHeight / game.tileSize;
-    var xMin = game.x - xTileMax;
-    var xMax = game.x + xTileMax;
-    var yMin = game.y - yTileMax;
-    var yMax = game.y + yTileMax;
+    var xMin = game.realX - xTileMax;
+    var xMax = game.realX + xTileMax;
+    var yMin = game.realY - yTileMax;
+    var yMax = game.realY + yTileMax;
     for(var y in tiles){
         for(var x in tiles[y]){
             if(x > xMin && x < xMax && y > yMin && y < yMax){
                 //might be on screen;
-                var relativeX = x - game.x; // x pos of tile compared to player
-                var relativeY = y - game.y; // y pos of tile compared to player
+                var relativeX = x - game.realX / game.tileSize; // x pos of tile compared to player
+                var relativeY = y - game.y;// y pos of tile compared to player
+                console.log(game.realX)
                 var middleX = windowWidth / 2 - game.tileSize; // middle of screen
                 var middleY = windowHeight / 2 - game.tileSize; // middle of screen
                 var xAdj = middleX + (relativeX * game.tileSize); // finds adjusted position of tile for drawing
@@ -155,8 +156,8 @@ function drawTiles(){
                     var offsetX = 0;
                     var offsetY = 0;
                     if(playerNum == game.playerNum){
-                        px = game.x;
-                        py = game.y;
+                        px = game.realX;
+                        py = game.realY;
                         offsetX = game.offset[0];
                         offsetY = game.offset[1];
                     }
@@ -256,6 +257,7 @@ function updateOffset(){
     if(offset[0] > 0){
         if(offset[0] < game.offsetResetSpeed){
             offset[0] = 0;
+            game.defaultResetSpeed = 2;
         } else {
             offset[0] -= game.offsetResetSpeed;
         }
@@ -263,6 +265,7 @@ function updateOffset(){
     if(offset[0] < 0){
         if(offset[0] > -game.offsetResetSpeed){
             offset[0] = 0;
+            game.defaultResetSpeed = 2;
         } else {
             offset[0] += game.offsetResetSpeed;
         }
@@ -270,6 +273,7 @@ function updateOffset(){
     if(offset[1] > 0){
         if(offset[1] < game.offsetResetSpeed){
             offset[1] = 0;
+            game.defaultResetSpeed = 2;
         } else {
             offset[1] -= game.offsetResetSpeed;
         }
@@ -277,9 +281,12 @@ function updateOffset(){
     if(offset[1] < 0){
         if(offset[1] > -game.offsetResetSpeed){
             offset[1] = 0;
+            game.defaultResetSpeed = 2;
         } else {
             offset[1] += game.offsetResetSpeed;
         }
     }
+    game.x = game.realX + offset[0];
+    game.y = game.realY + offset[1];
     game.offset = offset;
 }

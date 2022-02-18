@@ -52,13 +52,17 @@ function mobileAction(action){
 }
 
 function move(x, y){
-    var newTile = game.tiles[game.y + y][game.x + x];
+    var newTile = game.tiles[game.realY + y][game.realX + x];
     if(newTile["type"] == "wall") {
         game.offset = [x * 10, y * 10];
         console.log(game.offset)
         return;
+    } else{
+        //smooth out transition between tilesAvailable
+        game.offset = [-x * game.tileSize, -y * game.tileSize]
+        game.offsetResetSpeed = 12;
     }
-    game.x += x;
-    game.y += y;
+    game.realX += x;
+    game.realY += y;
     socket.emit("move", game.x, game.y);
 }

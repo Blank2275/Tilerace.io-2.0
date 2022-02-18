@@ -6,6 +6,8 @@ class Game{
         this.maxEnemyInArea = 8;
         this.x = 0;
         this.y = 0;
+        this.realX = 0;
+        this.realY = 0;
         this.homeY = 0;
         this.homeX = 0;
         this.tiles = [];
@@ -19,6 +21,7 @@ class Game{
         this.maxTileStrength = 20;
         this.offset = [0, 0];
         this.offsetResetSpeed = 2;
+        this.defaultResetSpeed = 2;
         this.shadowMode = false;
     }
     generateTileAvailabilities(){
