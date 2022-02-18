@@ -11,15 +11,44 @@ class Game{
         this.powerupProbability = 0.025;
         this.maxPowerupPower = 40;
         this.players = 2;
+        this.generationMode = "Chunks";
+        this.wallPercentage = 20;
+        this.offsetResetSpeed = 0.05;
         for(var y = 0; y < this.height; y++){
             this.tiles.push([]);
             for(var x = 0; x < this.width; x++){
                 this.tiles[y].push({
                     "owner": -1,
-                    "strength": 1
+                    "strength": 1,
+                    "type":"normal"
                 });
             }
         }
+        //generate walls
+        this.generateWalls();
+    }
+    generateWalls() {
+        if(this.generationMode == "Classic"){
+        } else if(this.generationMode == "Chunks"){
+            var amountToPlace = (this.width * this.height) * (this.wallPercentage / 100); //total amount of tiles times percent of tiles
+            //that should be wall
+            var placed = 0;
+            while(placed < amountToPlace){
+                var x = Math.floor(Math.random() * this.width);
+                var y = Math.floor(Math.random() * this.height);
+                if(this.minDistToEdge(x, y) > 2){
+                    this.tiles[y][x]["type"] = "wall";
+                    placed += 1;
+                }
+            }
+        }
+    }
+    minDistToEdge(x, y){
+        var topDist = y;
+        var bottomDist = this.height - y;
+        var leftDist = x;
+        var rightDist = this.width - x;
+        return Math.min(topDist, bottomDist, leftDist, rightDist);
     }
     addPlayer(id){
         if(this.numberOfActivePlayers < this.players){
@@ -63,7 +92,7 @@ exports.gameTick = function gameTick(game, io, first){
     if(Math.random() < game.powerupProbability){
         var x = Math.floor(Math.random() * game.width);
         var y = Math.floor(Math.random() * game.height);
-        while(game.tiles[y][x]["owner"] != -1){
+        while(game.tiles[y][x]["owner"] != -1 || game.tiles[y][x]["type"] != "normal"){
             x = Math.floor(Math.random() * game.width);
             y = Math.floor(Math.random() * game.height);          
         }

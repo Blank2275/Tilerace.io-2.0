@@ -25,5 +25,6 @@ function draw(){
     drawTiles();   
     drawUI();
     checkLose();
+    updateOffset();
     frameCount++;
 }

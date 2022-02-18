@@ -52,6 +52,12 @@ function mobileAction(action){
 }
 
 function move(x, y){
+    var newTile = game.tiles[game.y + y][game.x + x];
+    if(newTile["type"] == "wall") {
+        game.offset = [x * 10, y * 10];
+        console.log(game.offset)
+        return;
+    }
     game.x += x;
     game.y += y;
     socket.emit("move", game.x, game.y);

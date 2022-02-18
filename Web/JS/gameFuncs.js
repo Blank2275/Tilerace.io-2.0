@@ -88,6 +88,7 @@ function drawTiles(){
                 var tile = game.tiles[y][x];
                 var owner = tile["owner"];
                 var strength = tile["strength"];
+                var type = tile["type"];
                 
                 if(game.tileAvailabilities.length > 0){
                     var enemyInArea = game.tileAvailabilities[y][x];
@@ -135,6 +136,11 @@ function drawTiles(){
                     color[2] *= brightnesMultiplier;
                     fill(color[0], color[1], color[2]);
                 }
+                
+                //if is wall color dark gray
+                if(type == 'wall'){
+                    fill(100);
+                }
                 strokeWeight(3)
                 rect(xAdj, yAdj, game.tileSize, game.tileSize);
                 strokeWeight(1)
@@ -146,10 +152,18 @@ function drawTiles(){
                     var px = player["x"];
                     var py = player["y"];
                     var playerNum = player["playerNum"];
+                    var offsetX = 0;
+                    var offsetY = 0;
+                    if(playerNum == game.playerNum){
+                        px = game.x;
+                        py = game.y;
+                        offsetX = game.offset[0];
+                        offsetY = game.offset[1];
+                    }
 
                     if(px == x && py == y){
-                        var pXAdj = xAdj + game.tileSize / 2; // player adjusted x
-                        var pYAdj = yAdj + game.tileSize / 2;
+                        var pXAdj = xAdj + game.tileSize / 2 + offsetX; // player adjusted x
+                        var pYAdj = yAdj + game.tileSize / 2 + offsetY; // player adjusted y
                         var color = colors[playerNum];
                         fill(color[0], color[1], color[2]);
                         ellipse(pXAdj, pYAdj, 10, 10)
@@ -158,4 +172,37 @@ function drawTiles(){
             }
         }
     }
+}
+
+function updateOffset(){
+    var offset = game.offset;
+    if(offset[0] > 0){
+        if(offset[0] < game.offsetResetSpeed){
+            offset[0] = 0;
+        } else {
+            offset[0] -= game.offsetResetSpeed;
+        }
+    }
+    if(offset[0] < 0){
+        if(offset[0] > -game.offsetResetSpeed){
+            offset[0] = 0;
+        } else {
+            offset[0] += game.offsetResetSpeed;
+        }
+    }
+    if(offset[1] > 0){
+        if(offset[1] < game.offsetResetSpeed){
+            offset[1] = 0;
+        } else {
+            offset[1] -= game.offsetResetSpeed;
+        }
+    }
+    if(offset[1] < 0){
+        if(offset[1] > -game.offsetResetSpeed){
+            offset[1] = 0;
+        } else {
+            offset[1] += game.offsetResetSpeed;
+        }
+    }
+    game.offset = offset;
 }
