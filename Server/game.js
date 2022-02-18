@@ -14,6 +14,8 @@ class Game{
         this.generationMode = "Chunks";
         this.wallPercentage = 20;
         this.offsetResetSpeed = 0.05;
+        this.shadowMode = true;
+        this.shadowMode = true;
         for(var y = 0; y < this.height; y++){
             this.tiles.push([]);
             for(var x = 0; x < this.width; x++){

@@ -55,7 +55,7 @@ function setupPlayer(id){
         tilesAvailable = player["tiles"];
         io.emit("newPlayer", x, y, player["playerNum"]);
     }
-    io.to(id).emit("startSync", x, y, tiles, game.activePlayers, tilesAvailable, game.numberOfActivePlayers);
+    io.to(id).emit("startSync", x, y, tiles, game.activePlayers, tilesAvailable, game.numberOfActivePlayers, game.shadowMode);
 }
 
 io.on("connection", function (socket){

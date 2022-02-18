@@ -2,7 +2,7 @@ var socket = io();
 
 socket.emit("startSync");
 
-socket.on("startSync", (x, y, tiles, players, tilesAvailable, numberOfActivePlayers) => {
+socket.on("startSync", (x, y, tiles, players, tilesAvailable, numberOfActivePlayers, shadowMode) => {
     game.x = x; game.y = y;
     game.tiles = tiles;
     game.activePlayers = players;
@@ -13,6 +13,8 @@ socket.on("startSync", (x, y, tiles, players, tilesAvailable, numberOfActivePlay
     game.homeY = y;
     game.playing = true;
     game.ready = false;
+    console.log(shadowMode)
+    game.shadowMode = shadowMode;
     game.generateTileAvailabilities();
 });
 

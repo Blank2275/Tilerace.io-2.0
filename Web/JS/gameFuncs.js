@@ -172,6 +172,83 @@ function drawTiles(){
             }
         }
     }
+    //draw shadows if in shadow mode
+    if(game.shadowMode){
+        var distances = generateShadowDistances();
+        var angleStep = (Math.PI * 2) / distances.length;
+        for(var i in distances){
+            var shadowDistance = 10000;
+            var a1 = angleStep * i;
+            var dist1 = distances[i];
+            var adj1 = getAdjFromAngleDist(a1, dist1);
+            var adj1X = adj1[0]
+            var adj1Y = adj1[1]
+            var adj1ExtendedX = adj1X + Math.cos(a1) * shadowDistance;
+            var adj1ExtendedY = adj1Y + Math.sin(a1) * shadowDistance;
+            var a2 = a1 + angleStep * 2;
+            var dist2 = dist1;
+            var adj2 = getAdjFromAngleDist(a2, dist2);
+            var adj2X = adj2[0]
+            var adj2Y = adj2[1]
+            var adj2ExtendedX =  adj2X + Math.cos(a2) * shadowDistance;
+            var adj2ExtendedY = adj2Y + Math.sin(a2) * shadowDistance;
+            fill(40);
+            noStroke();
+            beginShape();
+            vertex(adj1[0], adj1[1]);
+            vertex(adj1ExtendedX, adj1ExtendedY);
+            vertex(adj2ExtendedX, adj2ExtendedY);
+            vertex(adj2[0], adj2[1]);
+            endShape(CLOSE);
+        }
+    }
+}
+
+function getAdjFromAngleDist(a, dist){
+    var x = Math.cos(a) * dist;
+    var y = Math.sin(a) * dist;
+    var relativeX = x; // x pos of tile compared to player
+    var relativeY = y; // y pos of tile compared to player
+    relativeX *= game.tileSize;
+    relativeY *= game.tileSize;
+    //console.log(relativeX)
+    var middleX = windowWidth / 2; // middle of screen
+    var middleY = windowHeight / 2; // middle of screen
+    var xAdj = middleX + relativeX; // finds adjusted position of tile for drawing
+    var yAdj = middleY + relativeY;
+    return [xAdj, yAdj];
+}
+
+function generateShadowDistances(){
+    var precision = 0.5;
+    var px = game.x;
+    var py = game.y;
+    var step = 0.01;
+    var distances = [];
+    for(var angle = 0; angle < 360; angle += precision){
+        a = angle * Math.PI / 180;
+        var dist = 0;
+        var x = px;
+        var y = py;
+        while(!colliding(x, y) && dist < 15){
+            x += Math.cos(a) * step;
+            y += Math.sin(a) * step;
+            dist += step;
+        }
+        distances.push(dist);
+    }
+    function colliding(x, y){
+        if(y > 0 && x > 0 && y < (game.tiles.length - 1) && x < (game.tiles[0].length - 1)){
+            var tile = game.tiles[Math.ceil(y)][Math.ceil(x)];
+            if(tile["type"] == "wall"){
+                return true
+            }
+            return false;
+        } else {
+            return false;
+        }
+    }
+    return distances;
 }
 
 function updateOffset(){

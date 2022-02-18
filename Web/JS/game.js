@@ -19,6 +19,7 @@ class Game{
         this.maxTileStrength = 20;
         this.offset = [0, 0];
         this.offsetResetSpeed = 2;
+        this.shadowMode = false;
     }
     generateTileAvailabilities(){
         this.tileAvailabilities = [];
