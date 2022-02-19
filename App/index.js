@@ -28,7 +28,7 @@ app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') app.quit();
 });
 
-ipcMain.on('restart', (event, index) => {
-    webServer.restart(index);
+ipcMain.on('restart', (event, players, gamemode, shadows) => {
+    webServer.restart(players, gamemode, shadows);
     event.returnValue = 'success';
 });

@@ -16,13 +16,13 @@
             #main-area{
                 width:fit-content;
                 min-width: 60%;
-                height:80%;
+                height:90%;
                 margin:auto auto;
                 margin-top:auto;
                 background-color:rgb(156, 156, 156);
                 display:grid;
                 grid-template-columns: repeat(1, 1fr);
-                grid-template-rows: repeat(3, 1fr);
+                grid-template-rows: repeat(4, 1fr);
             }
             #main-form{
                 margin:auto auto;
@@ -38,10 +38,20 @@
                 grid-row: 3;
             }
             #num-players{
-                width:90%;
-                position:relative;
                 grid-column: 1;
                 grid-row: 1;
+            }
+            #gamemode{
+                grid-column: 1;
+                grid-row:2;
+            }
+            #shadows{
+                grid-column: 1;
+                grid-row:3;
+            }
+            .select{
+                width:90%;
+                position:relative;
                 height:30%;
             }
             #qrcode{
@@ -63,11 +73,18 @@
         </style>
         <div id = "main-area">
             <div id = "main-form">
-                <select id = "num-players" name = "number of players">
+                <select class = "select" id = "num-players" name = "number of players">
                     <option>2 Players</option>
                     <option>3 Players</option>
                     <option>4 Players</option>
                 </select>
+                <select class = "select" id="gamemode" name="number of players">
+                    <option>Classic</option>
+                    <option>Chunks</option>
+                </select>
+                <br/>
+                <input type = "checkbox" id = "shadows" name = "shadows"></input>
+                <label for="shadows">Shadows</label>
                 <canvas id="qrcode"></canvas>
                 <p id = "QRinstructions">scan qrcode to open website on mobile</p>
                 <p id = "urlDisplay"></p>

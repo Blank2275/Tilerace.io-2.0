@@ -113,11 +113,13 @@ io.on("connection", function (socket){
     })
 });
 
-exports.restart = (playerIndex) => {
+exports.restart = (playerIndex, gamemode, shadows) => {
     //change settings
     var ids = game.playersLoggedIn;
-    game = new Game();
-    game.players = playerIndex + 2; // if the index of input is 0, the players is two
+    var modes = ["Classic", "Chunks"]
+    var generationMode = modes[gamemode];
+    game = new Game(generationMode, shadows);
+    game.players = playerIndex + 2;// if the index of input is 0, the players is two
     for(var id of ids){
         setupPlayer(id);
     }

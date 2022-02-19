@@ -21,6 +21,8 @@ window.addEventListener('DOMContentLoaded', () => {
 function restart(e){
     e.preventDefault()
     var playersIndex = document.getElementById("num-players").selectedIndex;
-    ipcRenderer.sendSync('restart', playersIndex);
+    var gamemodeIndex = document.getElementById("gamemode").selectedIndex;
+    var shadows = document.getElementById("shadows").checked;
+    ipcRenderer.sendSync('restart', playersIndex, gamemodeIndex, shadows);
     //sockelert(playersIndex);t.emit("restart", playersIndex);
 }
