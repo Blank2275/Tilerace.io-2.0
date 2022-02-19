@@ -38,7 +38,7 @@ class Game{
             while(placed < amountToPlace){
                 var x = Math.floor(Math.random() * this.width);
                 var y = Math.floor(Math.random() * this.height);
-                if(this.minDistToEdge(x, y) > 2){
+                if(this.minDistToEdge(x, y) > 1){
                     this.tiles[y][x]["type"] = "wall";
                     placed += 1;
                 }

@@ -18,6 +18,10 @@ socket.on("startSync", (x, y, tiles, players, tilesAvailable, numberOfActivePlay
     game.generateTileAvailabilities();
 });
 
+socket.on("restartWindow", () => {
+    window.reload();
+})
+
 socket.on("updatePlayers", (players) => {
     game.activePlayers = players;
 });

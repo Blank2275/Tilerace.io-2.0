@@ -95,7 +95,7 @@ io.on("connection", function (socket){
         var ids = game.playersLoggedIn;
         game = new Game("Classic", false, 30);
         for(var id of ids){
-            setupPlayer(id);
+            socket.emit("restartWindow");
         }
         game.playersLoggedIn = ids;
         first = true;
