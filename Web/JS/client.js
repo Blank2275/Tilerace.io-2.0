@@ -4,6 +4,7 @@ socket.emit("startSync");
 
 socket.on("startSync", (x, y, tiles, players, tilesAvailable, numberOfActivePlayers, shadowMode) => {
     game.x = x; game.y = y;
+    game.realX = x; game.realY = y;
     game.tiles = tiles;
     game.activePlayers = players;
     game.playerNum = Object.keys(players).length - 1;
@@ -13,7 +14,6 @@ socket.on("startSync", (x, y, tiles, players, tilesAvailable, numberOfActivePlay
     game.homeY = y;
     game.playing = true;
     game.ready = false;
-    console.log(shadowMode)
     game.shadowMode = shadowMode;
     game.generateTileAvailabilities();
 });
@@ -47,7 +47,7 @@ socket.on("placeTile", (x, y, id, num) => {
         for(var y1 = y - game.placeRange; y1 < y + game.placeRange; y1++){
             for(var x1 = x - game.placeRange; x1 < x + game.placeRange; x1++){
                 if(x1 >= 0 && y1 >= 0 && x1 < game.tiles[0].length && y1 < game.tiles.length){
-                    game.tileAvailabilities[y1][x1] += game.tiles[y][x]["strength"];;
+                    game.tileAvailabilities[y1][x1] += game.tiles[y][x]["strength"];
                 }
             }       
         }

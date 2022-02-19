@@ -74,13 +74,13 @@ function drawTiles(){
     var xMax = game.realX + xTileMax;
     var yMin = game.realY - yTileMax;
     var yMax = game.realY + yTileMax;
+    console.log((game.realX + (game.x / game.tileSize)));
     for(var y in tiles){
         for(var x in tiles[y]){
             if(x > xMin && x < xMax && y > yMin && y < yMax){
                 //might be on screen;
-                var relativeX = x - game.realX / game.tileSize; // x pos of tile compared to player
+                var relativeX = x - game.x // x pos of tile compared to player
                 var relativeY = y - game.y;// y pos of tile compared to player
-                console.log(game.realX)
                 var middleX = windowWidth / 2 - game.tileSize; // middle of screen
                 var middleY = windowHeight / 2 - game.tileSize; // middle of screen
                 var xAdj = middleX + (relativeX * game.tileSize); // finds adjusted position of tile for drawing
@@ -221,7 +221,7 @@ function getAdjFromAngleDist(a, dist){
 }
 
 function generateShadowDistances(){
-    var precision = 0.5;
+    var precision = 1;
     var px = game.x;
     var py = game.y;
     var step = 0.01;
@@ -231,7 +231,7 @@ function generateShadowDistances(){
         var dist = 0;
         var x = px;
         var y = py;
-        while(!colliding(x, y) && dist < 15){
+        while(!colliding(x, y) && dist < 8){
             x += Math.cos(a) * step;
             y += Math.sin(a) * step;
             dist += step;
@@ -286,7 +286,7 @@ function updateOffset(){
             offset[1] += game.offsetResetSpeed;
         }
     }
-    game.x = game.realX + offset[0];
-    game.y = game.realY + offset[1];
+    game.x = game.realX + offset[0] / game.tileSize;
+    game.y = game.realY + offset[1] / game.tileSize;
     game.offset = offset;
 }
