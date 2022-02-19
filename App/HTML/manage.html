@@ -21,7 +21,7 @@
                 margin-top:auto;
                 background-color:rgb(156, 156, 156);
                 display:grid;
-                grid-template-columns: repeat(1, 1fr);
+                grid-template-columns: repeat(2, 1fr);
                 grid-template-rows: repeat(4, 1fr);
             }
             #main-form{
@@ -48,6 +48,11 @@
             #shadows{
                 grid-column: 1;
                 grid-row:3;
+            }
+            #mapsize{
+                height:30%;
+                grid-column: 2;
+                grid-row: 1;
             }
             .select{
                 width:90%;
@@ -82,7 +87,7 @@
                     <option>7 Players</option>
                     <option>8 Players</option>
                 </select>
-                <select class = "select" id="gamemode" name="number of players">
+                <select class="select" id="gamemode" name="number of players">
                     <option>Classic</option>
                     <option>Chunks</option>
                 </select>
@@ -94,6 +99,12 @@
                 <p id = "urlDisplay"></p>
                 <button type="submit" id = "submit">Restart</button>
             </div>
+            <select id="mapsize">
+                <option>Small</option>
+                <option>Medium</option>
+                <option>Large</option>
+                <option>Massive</option>
+            </select>
         </div>
     </body>
 </html>

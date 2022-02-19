@@ -1,11 +1,12 @@
 class Game{
-    constructor(generationMode, shadows){
+    constructor(generationMode, shadows, size){
         this.addTileFrequency = 1000;
         this.numberOfActivePlayers = 0;
         this.activePlayers = {};
         this.playersLoggedIn = [];
-        this.width = 30;
-        this.height = 30;
+        console.log(size)
+        this.width = size;
+        this.height = size;
         this.tiles = [];
         this.playing = false;
         this.powerupProbability = 0.025;
@@ -128,6 +129,7 @@ exports.gameTick = function gameTick(game, io, first){
     if(Math.random() < game.powerupProbability){
         var x = Math.floor(Math.random() * game.width);
         var y = Math.floor(Math.random() * game.height);
+        console.log(x);
         while(game.tiles[y][x]["owner"] != -1 || game.tiles[y][x]["type"] != "normal"){
             x = Math.floor(Math.random() * game.width);
             y = Math.floor(Math.random() * game.height);          

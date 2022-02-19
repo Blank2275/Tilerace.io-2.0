@@ -22,7 +22,8 @@ function restart(e){
     e.preventDefault()
     var playersIndex = document.getElementById("num-players").selectedIndex;
     var gamemodeIndex = document.getElementById("gamemode").selectedIndex;
+    var mapSizeIndex = document.getElementById("mapsize").selectedIndex;
     var shadows = document.getElementById("shadows").checked;
-    ipcRenderer.sendSync('restart', playersIndex, gamemodeIndex, shadows);
+    ipcRenderer.sendSync('restart', playersIndex, gamemodeIndex, shadows, mapSizeIndex);
     //sockelert(playersIndex);t.emit("restart", playersIndex);
 }
