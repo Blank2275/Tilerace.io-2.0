@@ -37,7 +37,7 @@ app.get("/manage", function(req, res){
 
 
 //var players = 3;
-var game = new Game();
+var game = new Game("Classic", false, 30);
 var first = true;
 
 setInterval(() => gameTick(game, io, first), game.addTileFrequency);
@@ -93,7 +93,7 @@ io.on("connection", function (socket){
         game.players = playerIndex + 2; // if the index of input is 0, the players is two
         
         var ids = game.playersLoggedIn;
-        game = new Game();
+        game = new Game("Classic", false, 30);
         for(var id of ids){
             setupPlayer(id);
         }
@@ -113,12 +113,14 @@ io.on("connection", function (socket){
     })
 });
 
-exports.restart = (playerIndex, gamemode, shadows) => {
+exports.restart = (playerIndex, gamemode, shadows, mapSizeIndex) => {
     //change settings
     var ids = game.playersLoggedIn;
     var modes = ["Classic", "Chunks"]
     var generationMode = modes[gamemode];
-    game = new Game(generationMode, shadows);
+    var sizes = [15, 30, 45, 60];
+    var size = sizes[mapSizeIndex];
+    game = new Game(generationMode, shadows, size);
     game.players = playerIndex + 2;// if the index of input is 0, the players is two
     for(var id of ids){
         setupPlayer(id);
