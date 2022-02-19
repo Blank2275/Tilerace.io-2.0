@@ -224,14 +224,14 @@ function generateShadowDistances(){
     var precision = 1;
     var px = game.x;
     var py = game.y;
-    var step = 0.01;
+    var step = 0.04;
     var distances = [];
     for(var angle = 0; angle < 360; angle += precision){
         a = angle * Math.PI / 180;
         var dist = 0;
         var x = px;
         var y = py;
-        while(!colliding(x, y) && dist < 8){
+        while(!colliding(x, y) && dist < 10){
             x += Math.cos(a) * step;
             y += Math.sin(a) * step;
             dist += step;
