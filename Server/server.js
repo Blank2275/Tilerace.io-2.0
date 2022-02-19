@@ -40,7 +40,7 @@ app.get("/manage", function(req, res){
 var game = new Game("Classic", false, 30);
 var first = true;
 
-setInterval(() => gameTick(game, io, first), game.addTileFrequency);
+setInterval(() => first = gameTick(game, io, first), game.addTileFrequency);
 
 function setupPlayer(id){
     game.addPlayer(id);
@@ -99,8 +99,6 @@ io.on("connection", function (socket){
         }
         game.playersLoggedIn = ids;
         first = true;
-        console.log(Object.keys(game.activePlayers).length);
-        console.log(game.players)
         if(Object.keys(game.activePlayers).length == game.players){
             game.playing = true;
         }

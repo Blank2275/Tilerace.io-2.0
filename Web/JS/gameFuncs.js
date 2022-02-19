@@ -13,7 +13,6 @@ function place(){
                         enemyInArea += tile["strength"];
                     }
                 }
-                console.log(enemyInArea)
             }
         }   
     }
@@ -74,7 +73,6 @@ function drawTiles(){
     var xMax = game.realX + xTileMax;
     var yMin = game.realY - yTileMax;
     var yMax = game.realY + yTileMax;
-    console.log((game.realX + (game.x / game.tileSize)));
     for(var y in tiles){
         for(var x in tiles[y]){
             if(x > xMin && x < xMax && y > yMin && y < yMax){

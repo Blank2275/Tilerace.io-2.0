@@ -63,7 +63,6 @@ function move(x, y){
     var newTile = game.tiles[game.realY + y][game.realX + x];
     if(newTile["type"] == "wall") {
         game.offset = [x * 10, y * 10];
-        console.log(game.offset)
         return;
     } else{
         //smooth out transition between tilesAvailable
@@ -75,4 +74,23 @@ function move(x, y){
     game.realX += x;
     game.realY += y;
     socket.emit("move", game.x, game.y);
+}
+
+function displaySecsToStart(){
+    if(game.secsToStart != -1){
+        var textToDisplay = "";
+        console.log(game.secsToStart)
+        if(game.secsToStart > 0){
+            fill(250, 20, 65)
+            textToDisplay = `${game.secsToStart}`;
+        } else{
+            fill(25, 255, 70);
+            textToDisplay = `Go!`
+        }
+        textSize(32);
+        var sizeOfText = textWidth(textToDisplay);
+        var x = windowWidth / 2 - sizeOfText / 2;
+        var y = windowHeight / 2;
+        text(textToDisplay, x, y);
+    }
 }

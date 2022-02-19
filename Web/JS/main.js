@@ -26,5 +26,6 @@ function draw(){
     drawUI();
     checkLose();
     updateOffset();
+    displaySecsToStart();
     frameCount++;
 }

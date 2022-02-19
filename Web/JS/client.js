@@ -77,6 +77,20 @@ socket.on("newPlayer", (x, y, num) => {
     }
 });
 
+socket.on("5secs", () => {
+    game.secsToStart = 5;
+    if(game.secInterval){
+        clearInterval(game.secInterval);
+    }
+    game.secInterval = setInterval(() => {
+        game.secsToStart -= 1;
+        if(game.secsToStart === -1){
+            clearInterval(game.secInterval);
+            game.secsToStart = -1;
+        }
+    }, 1000);
+});
+
 socket.on("start", () => {
     game.ready = true;
 });

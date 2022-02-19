@@ -23,6 +23,7 @@ class Game{
         this.offsetResetSpeed = 2;
         this.defaultResetSpeed = 2;
         this.shadowMode = false;
+        this.secsToStart = -1;
     }
     generateTileAvailabilities(){
         this.tileAvailabilities = [];

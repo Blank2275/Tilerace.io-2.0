@@ -4,7 +4,6 @@ class Game{
         this.numberOfActivePlayers = 0;
         this.activePlayers = {};
         this.playersLoggedIn = [];
-        console.log(size)
         this.width = size;
         this.height = size;
         this.tiles = [];
@@ -129,7 +128,6 @@ exports.gameTick = function gameTick(game, io, first){
     if(Math.random() < game.powerupProbability){
         var x = Math.floor(Math.random() * game.width);
         var y = Math.floor(Math.random() * game.height);
-        console.log(x);
         while(game.tiles[y][x]["owner"] != -1 || game.tiles[y][x]["type"] != "normal"){
             x = Math.floor(Math.random() * game.width);
             y = Math.floor(Math.random() * game.height);          
@@ -142,10 +140,14 @@ exports.gameTick = function gameTick(game, io, first){
     if(game.playing){
         io.emit("addTile");
         if(first){
-            io.emit("start");
+            io.emit("5secs");
             first = false;
+            setTimeout(() =>{
+                io.emit("start");
+            }, 5050)
         }
     }
+    return first;
 }
 
 exports.Game = Game;
