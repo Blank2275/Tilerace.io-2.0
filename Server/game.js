@@ -55,21 +55,56 @@ class Game{
         if(this.numberOfActivePlayers < this.players){
             var x = 0;
             var y = 0;
-            if(this.numberOfActivePlayers == 0){
-                x = 0;
-                y = Math.floor(this.height / 2);
-            }
-            if(this.numberOfActivePlayers == 1){
-                x = this.width - 1;
-                y = Math.floor(this.height / 2);
-            }
-            if(this.numberOfActivePlayers == 2){
-                x = Math.floor(this.width / 2);
-                y = 0;
-            }
-            if(this.numberOfActivePlayers == 3){
-                x = Math.floor(this.width / 2);
-                y = this.height - 1;           
+            if(this.player < 5){
+                if(this.numberOfActivePlayers == 0){
+                    x = 0;
+                    y = Math.floor(this.height / 2);
+                }
+                if(this.numberOfActivePlayers == 1){
+                    x = this.width - 1;
+                    y = Math.floor(this.height / 2);
+                }
+                if(this.numberOfActivePlayers == 2){
+                    x = Math.floor(this.width / 2);
+                    y = 0;
+                }
+                if(this.numberOfActivePlayers == 3){
+                    x = Math.floor(this.width / 2);
+                    y = this.height - 1;           
+                }
+            } else{
+                if(this.numberOfActivePlayers == 0){
+                    x = 0;
+                    y = Math.floor(this.height / 3);
+                }
+                if(this.numberOfActivePlayers == 1){
+                    x = this.width - 1;
+                    y = Math.floor(this.height / 3);
+                }
+                if(this.numberOfActivePlayers == 2){
+                    x = Math.floor(this.width / 3);
+                    y = 0;
+                }
+                if(this.numberOfActivePlayers == 3){
+                    x = Math.floor(this.width / 3);
+                    y = this.height - 1;
+                }
+                if(this.numberOfActivePlayers == 4){
+                    x = 0;
+                    y = Math.floor(this.height / 3 * 2);
+                }
+                if(this.numberOfActivePlayers == 5){
+                    x = this.width - 1;
+                    y = Math.floor(this.height / 3 * 2);         
+                }
+                if(this.numberOfActivePlayers == 6){
+                    x = Math.floor(this.width / 3 * 2);
+                    y = 0;
+                }
+                if(this.numberOfActivePlayers == 7){
+                    x = Math.floor(this.width / 3 * 2);
+                    y = this.height - 1;         
+                }
             }
             this.tiles[y][x] = {
                 "owner": this.numberOfActivePlayers,

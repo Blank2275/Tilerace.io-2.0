@@ -1,14 +1,22 @@
 var colors = {
-    0: [240, 30, 60],
-    1: [30, 70, 240], 
-    2: [30, 240, 65], 
-    3: [162, 0, 255]
+    0: [240, 10, 20],//red
+    1: [30, 70, 240], //blue
+    2: [30, 240, 65], //green
+    3: [162, 0, 255], //Purple
+    4: [255, 0, 76], //magenta
+    5: [20, 255, 220], //cyan
+    6: [102, 0, 255], //violet
+    7: [200, 255, 20] //lime
 }
 var playerNames = {
     0: "Red",
     1: "Blue",
     2: "Green",
-    3: "Purple"
+    3: "Purple",
+    4: "Magenta",
+    5: "Cyan",
+    6: "Violet",
+    7: "Lime"
 }
 
 function checkLose(){
@@ -59,7 +67,9 @@ function move(x, y){
         return;
     } else{
         //smooth out transition between tilesAvailable
-        game.offset = [-x * game.tileSize, -y * game.tileSize]
+        //game.offset = [-x * game.tileSize, -y * game.tileSize]
+        game.offset[0] += -x * game.tileSize;
+        game.offset[1] += -y * game.tileSize;
         game.offsetResetSpeed = 12;
     }
     game.realX += x;
