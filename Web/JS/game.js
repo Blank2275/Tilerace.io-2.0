@@ -17,7 +17,7 @@ class Game{
         this.tilesAvailable = 10;
         this.playing = true;
         this.ready = false
-        this.invasionSpeed = 1.2;//how easily you can place tiles near enemies
+        this.invasionSpeed = 1;//how easily you can place tiles near enemies
         this.maxTileStrength = 20;
         this.offset = [0, 0];
         this.offsetResetSpeed = 2;

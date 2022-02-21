@@ -62,6 +62,7 @@ socket.on("placeTile", (x, y, id, num) => {
 
 socket.on("addTile", () => {
     game.tilesAvailable += 1;
+    game.invasionSpeed += 1 / (60 * 3); //increase invasion speed, + 1.2 every 4 minutes
 });
 
 socket.on("lose", (id, num) => {
