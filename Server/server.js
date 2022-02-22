@@ -37,7 +37,7 @@ app.get("/manage", function(req, res){
 
 
 //var players = 3;
-var game = new Game("Classic", false, 30, 20);
+var game = new Game("Classic", false, 30, 20, 10);
 var first = true;
 
 setInterval(() => first = gameTick(game, io, first), game.addTileFrequency);
@@ -93,7 +93,7 @@ io.on("connection", function (socket){
         game.players = playerIndex + 2; // if the index of input is 0, the players is two
         
         var ids = game.playersLoggedIn;
-        game = new Game("Classic", false, 30, 20);
+        game = new Game("Classic", false, 30, 20, 10);
         for(var id of ids){
             socket.emit("restartWindow");
         }
@@ -111,7 +111,7 @@ io.on("connection", function (socket){
     })
 });
 
-exports.restart = (playerIndex, gamemode, shadows, mapSizeIndex, wallPercentageIndex) => {
+exports.restart = (playerIndex, gamemode, shadows, mapSizeIndex, wallPercentageIndex, chunkSizeIndex) => {
     //change settings
     var ids = game.playersLoggedIn;
     var modes = ["Classic", "Random", "Chunks"]
@@ -120,7 +120,9 @@ exports.restart = (playerIndex, gamemode, shadows, mapSizeIndex, wallPercentageI
     var sizes = [15, 30, 45, 60];
     var size = sizes[mapSizeIndex];
     var wallPercent = wallPercentages[wallPercentageIndex]
-    game = new Game(generationMode, shadows, size, wallPercent);
+    var chunkSizes = [5, 10, 15];
+    var chunkSize = chunkSizes[chunkSizeIndex];
+    game = new Game(generationMode, shadows, size, wallPercent, chunkSize);
     game.players = playerIndex + 2;// if the index of input is 0, the players is two
     for(var id of ids){
         setupPlayer(id);

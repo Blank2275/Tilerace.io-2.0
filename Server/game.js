@@ -1,6 +1,6 @@
 var {SimplexNoise} = require("simplex-noise");
 class Game{
-    constructor(generationMode, shadows, size, wallPercentage){
+    constructor(generationMode, shadows, size, wallPercentage, chunkSize){
         this.addTileFrequency = 1000;
         this.numberOfActivePlayers = 0;
         this.activePlayers = {};
@@ -16,7 +16,7 @@ class Game{
         this.wallPercentage = wallPercentage;
         this.offsetResetSpeed = 0.05;
         this.shadowMode = shadows;
-        this.chunkSize = 10;
+        this.chunkSize = chunkSize;
         for(var y = 0; y < this.height; y++){
             this.tiles.push([]);
             for(var x = 0; x < this.width; x++){

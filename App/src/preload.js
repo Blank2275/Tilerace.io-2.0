@@ -24,7 +24,8 @@ function restart(e){
     var gamemodeIndex = document.getElementById("gamemode").selectedIndex;
     var mapSizeIndex = document.getElementById("mapsize").selectedIndex;
     var wallPercentageIndex = document.getElementById("wall-percentage").selectedIndex;
+    var chunkSizeIndex = document.getElementById("chunk-size").selectedIndex;
     var shadows = document.getElementById("shadows").checked;
-    ipcRenderer.sendSync('restart', playersIndex, gamemodeIndex, shadows, mapSizeIndex, wallPercentageIndex);
+    ipcRenderer.sendSync('restart', playersIndex, gamemodeIndex, shadows, mapSizeIndex, wallPercentageIndex, chunkSizeIndex);
     //sockelert(playersIndex);t.emit("restart", playersIndex);
 }

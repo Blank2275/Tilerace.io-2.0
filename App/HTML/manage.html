@@ -79,6 +79,10 @@
             .select{
                 max-height: 15vh;
             }
+            #chunk-size{
+                grid-column:3;
+                grid-row:2;
+            }
         </style>
         <div id = "main-area">
             <select class="select" id="num-players" name="number of players">
@@ -108,6 +112,11 @@
                 <option>50%</option>
                 <option>60%</option>
                 <option>70%</option>
+            </select>
+            <select class="select" id="chunk-size">
+                <option>small</option>
+                <option>medium</option>
+                <option>large</option>
             </select>
             
             <button class="select" type="submit" id="submit">Restart</button>
