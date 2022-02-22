@@ -22,6 +22,9 @@ function place(){
             if(enemyInArea < game.maxEnemyInArea && (game.tilesAvailable >= tile["strength"] || tile["owner"] == -3)){
                 if(tile["strength"] < game.maxTileStrength || tile["owner"] == -3 || tile["owner"] !== game.playerNum){//spaghetti code
                     socket.emit("placeTile", game.realX, game.realY, game.playerNum);
+                    if(game.tiles[game.realY][game.realX]["owner"] !== game.playerNum){
+                        game.tiles[game.realY][game.realX]["strength"] = 0;
+                    }
                     game.tiles[game.realY][game.realX]["strength"] += 1;
                     game.tiles[game.realY][game.realX]["owner"] = game.playerNum;
                     if(game.playerNum !== tile["owner"] && tile["owner"] != -1){
