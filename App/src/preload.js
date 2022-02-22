@@ -20,11 +20,11 @@ window.addEventListener('DOMContentLoaded', () => {
 
 function restart(e){
     e.preventDefault()
-    var playersIndex = document.getElementById("num-players").selectedIndex;
-    var gamemodeIndex = document.getElementById("gamemode").selectedIndex;
-    var mapSizeIndex = document.getElementById("mapsize").selectedIndex;
-    var wallPercentageIndex = document.getElementById("wall-percentage").selectedIndex;
-    var chunkSizeIndex = document.getElementById("chunk-size").selectedIndex;
+    var playersIndex = document.getElementById("num-players-input").selectedIndex;
+    var gamemodeIndex = document.getElementById("gamemode-input").selectedIndex;
+    var mapSizeIndex = document.getElementById("mapsize-input").selectedIndex;
+    var wallPercentageIndex = document.getElementById("wall-percentage-input").selectedIndex;
+    var chunkSizeIndex = document.getElementById("chunk-size-input").selectedIndex;
     var shadows = document.getElementById("shadows").checked;
     ipcRenderer.sendSync('restart', playersIndex, gamemodeIndex, shadows, mapSizeIndex, wallPercentageIndex, chunkSizeIndex);
     //sockelert(playersIndex);t.emit("restart", playersIndex);

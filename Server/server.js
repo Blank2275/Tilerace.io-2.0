@@ -119,6 +119,7 @@ exports.restart = (playerIndex, gamemode, shadows, mapSizeIndex, wallPercentageI
     var generationMode = modes[gamemode];
     var sizes = [15, 30, 45, 60];
     var size = sizes[mapSizeIndex];
+    console.log(mapSizeIndex)
     var wallPercent = wallPercentages[wallPercentageIndex]
     var chunkSizes = [5, 10, 15];
     var chunkSize = chunkSizes[chunkSizeIndex];
