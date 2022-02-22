@@ -73,7 +73,7 @@ function move(x, y){
     }
     game.realX += x;
     game.realY += y;
-    socket.emit("move", game.x, game.y);
+    socket.emit("move", game.realX, game.realY);
 }
 
 function displaySecsToStart(){

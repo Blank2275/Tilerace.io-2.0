@@ -56,8 +56,10 @@ socket.on("placeTile", (x, y, id, num) => {
             }       
         }
     }
-    game.tiles[y][x]["strength"] += 1;
-    game.tiles[y][x]["owner"] = num;
+    if(game.playerNum !== num){//only update tile here if is not self performing action
+        game.tiles[y][x]["strength"] += 1;//otherwise do it instantly in place function
+        game.tiles[y][x]["owner"] = num;
+    }
 });
 
 socket.on("addTile", () => {
