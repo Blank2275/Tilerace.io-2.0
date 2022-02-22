@@ -12,62 +12,51 @@
             body{
                 background: linear-gradient(to bottom right,rgb(8, 86, 230), rgb(235, 61, 61));
                 overflow: hidden;
+                padding: 0;
+                margin: 0;
             }
             #main-area{
                 width:fit-content;
                 min-width: 60%;
-                height:90%;
+                height:100%;
                 margin:auto auto;
                 margin-top:auto;
                 background-color:rgb(156, 156, 156);
                 display:grid;
-                grid-template-columns: repeat(2, 1fr);
+                grid-template-columns: repeat(3, 1fr);
                 grid-template-rows: repeat(4, 1fr);
             }
             #main-form{
                 margin:auto auto;
                 width:95%;
-                height:95%;
+                height:55%;
             }
             #submit{
-                width:90%;
-                height:30%;
                 background-color:rgb(100,100,100);
                 position:relative;
-                grid-column: 1;
-                grid-row: 3;
+                grid-column: 1/4;
+                grid-row: 4;
             }
             #num-players{
                 grid-column: 1;
                 grid-row: 1;
             }
             #gamemode{
-                grid-column: 1;
-                grid-row:2;
+                grid-column: 3;
+                grid-row:1;
             }
             #shadows{
                 grid-column: 1;
                 grid-row:3;
             }
             #mapsize{
-                height:30%;
                 grid-column: 2;
                 grid-row: 1;
             }
-            .select{
-                width:90%;
-                position:relative;
-                height:30%;
-            }
             #qrcode{
+                grid-column: 2;
+                grid-row: 3/4;
                 display:flex;
-                justify-content:center;
-                height:200px;
-                width:200px;
-                position:relative;
-                left:calc(50% - 100px);
-                grid-column: 1;
-                grid-row: 2;
             }
             #QRinstructions{
                 text-align:center;
@@ -75,36 +64,62 @@
             #urlDisplay{
                 text-align:center;
             }
+            #text-labels{
+                grid-column: 1;
+                grid-row:3;
+            }
+            #boolean-options{
+                grid-column: 3;
+                grid-row:3;
+            }
+            #wall-percentage{
+                grid-column:1;
+                grid-row:2;
+            }
+            .select{
+                max-height: 15vh;
+            }
         </style>
         <div id = "main-area">
-            <div id = "main-form">
-                <select class = "select" id = "num-players" name = "number of players">
-                    <option>2 Players</option>
-                    <option>3 Players</option>
-                    <option>4 Players</option>
-                    <option>5 Players</option>
-                    <option>6 Players</option>
-                    <option>7 Players</option>
-                    <option>8 Players</option>
-                </select>
-                <select class="select" id="gamemode" name="number of players">
-                    <option>Classic</option>
-                    <option>Chunks</option>
-                </select>
-                <br/>
-                <input type = "checkbox" id = "shadows" name = "shadows"></input>
-                <label for="shadows">Shadows</label>
-                <canvas id="qrcode"></canvas>
-                <p id = "QRinstructions">scan qrcode to open website on mobile</p>
-                <p id = "urlDisplay"></p>
-                <button type="submit" id = "submit">Restart</button>
-            </div>
-            <select id="mapsize">
+            <select class="select" id="num-players" name="number of players">
+                <option>2 Players</option>
+                <option>3 Players</option>
+                <option>4 Players</option>
+                <option>5 Players</option>
+                <option>6 Players</option>
+                <option>7 Players</option>
+                <option>8 Players</option>
+            </select>
+            <select class="select" id="gamemode" name="number of players">
+                <option>Classic</option>
+                <option>Random</option>
+                <option>Chunks</option>
+            </select>
+            <select class="select" id="mapsize">
                 <option>Small</option>
                 <option>Medium</option>
                 <option>Large</option>
                 <option>Massive</option>
             </select>
+            <select class="select" id="wall-percentage">
+                <option>20%</option>
+                <option>30%</option>
+                <option>40%</option>
+                <option>50%</option>
+                <option>60%</option>
+                <option>70%</option>
+            </select>
+            
+            <button class="select" type="submit" id="submit">Restart</button>
+            <div class="select" id = "text-labels">
+                <p id="QRinstructions">scan qrcode to open website on mobile</p>
+                <p id="urlDisplay"></p>
+            </div>
+            <div class="select" id = "boolean-options">
+                <input type="checkbox" id="shadows" name="shadows"></input>
+                <label for="shadows">Shadows</label>
+            </div>
+            <canvas id="qrcode"></canvas>
         </div>
     </body>
 </html>

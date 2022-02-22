@@ -1,5 +1,6 @@
+var {SimplexNoise} = require("simplex-noise");
 class Game{
-    constructor(generationMode, shadows, size){
+    constructor(generationMode, shadows, size, wallPercentage){
         this.addTileFrequency = 1000;
         this.numberOfActivePlayers = 0;
         this.activePlayers = {};
@@ -12,9 +13,10 @@ class Game{
         this.maxPowerupPower = 40;
         this.players = 2;
         this.generationMode = generationMode;
-        this.wallPercentage = 20;
+        this.wallPercentage = wallPercentage;
         this.offsetResetSpeed = 0.05;
         this.shadowMode = shadows;
+        this.chunkSize = 10;
         for(var y = 0; y < this.height; y++){
             this.tiles.push([]);
             for(var x = 0; x < this.width; x++){
@@ -30,7 +32,7 @@ class Game{
     }
     generateWalls() {
         if(this.generationMode == "Classic"){
-        } else if(this.generationMode == "Chunks"){
+        } else if(this.generationMode == "Random"){
             var amountToPlace = (this.width * this.height) * (this.wallPercentage / 100); //total amount of tiles times percent of tiles
             //that should be wall
             var placed = 0;
@@ -40,6 +42,18 @@ class Game{
                 if(this.minDistToEdge(x, y) > 1){
                     this.tiles[y][x]["type"] = "wall";
                     placed += 1;
+                }
+            }
+        } else if(this.generationMode == "Chunks"){
+            var noise = new SimplexNoise();
+            for(var y = 0; y < this.height; y++){
+                for(var x = 0; x < this.width; x++){
+                    var value = (noise.noise2D(y / this.chunkSize, x / this.chunkSize) + 1) / 2;
+                    // console.log(value + "    " + this.wallPercentage / 100);
+                    
+                    if(value < this.wallPercentage / 100 && this.minDistToEdge(x, y) > 1){
+                        this.tiles[y][x]["type"] = "wall";
+                    }
                 }
             }
         }

@@ -28,7 +28,7 @@ app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') app.quit();
 });
 
-ipcMain.on('restart', (event, players, gamemode, shadows, mapSizeIndex) => {
-    webServer.restart(players, gamemode, shadows, mapSizeIndex);
+ipcMain.on('restart', (event, players, gamemode, shadows, mapSizeIndex, wallPercentageIndex) => {
+    webServer.restart(players, gamemode, shadows, mapSizeIndex, wallPercentageIndex);
     event.returnValue = 'success';
 });
