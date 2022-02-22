@@ -83,42 +83,60 @@
                 grid-column:3;
                 grid-row:2;
             }
+            .fill{
+                width: 100%;
+                height: 100%;
+            }
         </style>
         <div id = "main-area">
-            <select class="select" id="num-players" name="number of players">
-                <option>2 Players</option>
-                <option>3 Players</option>
-                <option>4 Players</option>
-                <option>5 Players</option>
-                <option>6 Players</option>
-                <option>7 Players</option>
-                <option>8 Players</option>
-            </select>
-            <select class="select" id="gamemode" name="number of players">
-                <option>Classic</option>
-                <option>Random</option>
-                <option>Chunks</option>
-            </select>
-            <select class="select" id="mapsize">
-                <option>Small</option>
-                <option>Medium</option>
-                <option>Large</option>
-                <option>Massive</option>
-            </select>
-            <select class="select" id="wall-percentage">
-                <option>20%</option>
-                <option>30%</option>
-                <option>40%</option>
-                <option>50%</option>
-                <option>60%</option>
-                <option>70%</option>
-            </select>
-            <select class="select" id="chunk-size">
-                <option>small</option>
-                <option>medium</option>
-                <option>large</option>
-            </select>
-            
+            <div id="num-players">
+                <select name="number-of-players" class="fill select">
+                    <option>2 Players</option>
+                    <option>3 Players</option>
+                    <option>4 Players</option>
+                    <option>5 Players</option>
+                    <option>6 Players</option>
+                    <option>7 Players</option>
+                    <option>8 Players</option>
+                </select>
+                <p style = "text-align:center;">Number of players</p>
+            </div>
+            <div class="select" id="gamemode">
+                <select class = "fill select">
+                    <option>Classic</option>
+                    <option>Random</option>
+                    <option>Chunks</option>
+                </select>
+                <p style="text-align:center;">Generation Mode</p>
+            </div>
+            <div id="mapsize">
+                <select class = "fill select">
+                    <option>Small</option>
+                    <option>Medium</option>
+                    <option>Large</option>
+                    <option>Massive</option>
+                </select>
+                <p style="text-align:center;">Map Size</p>
+            </div>
+            <div id="wall-percentage">
+                <select class = "fill select">
+                    <option>20%</option>
+                    <option>30%</option>
+                    <option>40%</option>
+                    <option>50%</option>
+                    <option>60%</option>
+                    <option>70%</option>
+                </select>
+                <p style="text-align:center;">Wall Percentage</p>
+            </div>
+            <div id="chunk-size">
+                <select class = "fill select">
+                    <option>small</option>
+                    <option>medium</option>
+                    <option>large</option>
+                </select>
+                <p style="text-align:center;">Chunk Size</p>
+            </div>
             <button class="select" type="submit" id="submit">Restart</button>
             <div class="select" id = "text-labels">
                 <p id="QRinstructions">scan qrcode to open website on mobile</p>
